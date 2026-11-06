@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Terminal, Copy, CheckCircle2, Download, Code2, Cpu, Database, Blocks, Zap, ExternalLink } from "lucide-react";
+import { Terminal, Copy, CheckCircle2, Download, Code2, Cpu, Database, Blocks, Zap, ExternalLink, Layers } from "lucide-react";
 
 interface HardwareGatewayModalProps {
   isOpen: boolean;
@@ -10,6 +10,7 @@ interface HardwareGatewayModalProps {
 
 export function HardwareGatewayModal({ isOpen, onClose }: HardwareGatewayModalProps) {
   const [activeTab, setActiveTab] = useState<"circuit" | "arduino" | "gateway" | "contract" | "database">("circuit");
+  const [circuitView, setCircuitView] = useState<"schematic" | "breadboard">("breadboard");
   const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
@@ -344,7 +345,7 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
 
   const handleCopy = () => {
     if (activeTab === "circuit") {
-      navigator.clipboard.writeText("See docs/CIRCUIT_DIAGRAM.md and public/circuit_diagram.svg for the full schematic.");
+      navigator.clipboard.writeText("See docs/BREADBOARD_GUIDE.md and docs/CIRCUIT_DIAGRAM.md for the complete wiring guide.");
     } else {
       navigator.clipboard.writeText(codeSnippets[activeTab]);
     }
@@ -354,9 +355,10 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
 
   const handleDownload = () => {
     if (activeTab === "circuit") {
+      const file = circuitView === "breadboard" ? "/breadboard_diagram.svg" : "/circuit_diagram.svg";
       const a = document.createElement("a");
-      a.href = "/circuit_diagram.svg";
-      a.download = "farmatrix_circuit_schematic.svg";
+      a.href = file;
+      a.download = circuitView === "breadboard" ? "farmatrix_breadboard_layout.svg" : "farmatrix_circuit_schematic.svg";
       a.click();
       return;
     }
@@ -388,10 +390,10 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
             </div>
             <div>
               <h3 className="text-base font-bold text-white">
-                Developer Hub, Circuit Schematic &amp; Source Code
+                Developer Hub, Breadboard Layout &amp; Source Code
               </h3>
               <p className="text-xs text-slate-400">
-                Arduino UNO R3 wiring schematic, C++ firmware, Node.js gateway, NEAR Rust contract, and Supabase DDL
+                Arduino UNO R3 breadboard layout, C++ firmware, Node.js gateway, NEAR Rust contract, and Supabase DDL
               </p>
             </div>
           </div>
@@ -413,7 +415,7 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
               }`}
             >
               <Zap className="h-3.5 w-3.5" />
-              <span>Circuit Diagram (Schematic)</span>
+              <span>Circuit &amp; Breadboard Diagram</span>
             </button>
 
             <button
@@ -479,51 +481,82 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
         {/* Tab Content */}
         {activeTab === "circuit" ? (
           <div className="flex-1 overflow-y-auto rounded-2xl border border-white/10 bg-black/90 p-4 space-y-4">
+            
+            {/* View Sub-Toggle: Breadboard vs Schematic */}
+            <div className="flex items-center justify-between bg-slate-900/90 rounded-xl p-2 border border-white/10">
+              <span className="text-xs font-semibold text-slate-300 pl-2">Select Circuit View:</span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setCircuitView("breadboard")}
+                  className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                    circuitView === "breadboard"
+                      ? "bg-amber-500 text-slate-950 shadow-sm"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  🍞 Breadboard Prototyping View
+                </button>
+                <button
+                  onClick={() => setCircuitView("schematic")}
+                  className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                    circuitView === "schematic"
+                      ? "bg-amber-500 text-slate-950 shadow-sm"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  ⚡ Electrical Schematic View
+                </button>
+              </div>
+            </div>
+
+            {/* Render Selected Diagram */}
             <div className="rounded-xl overflow-hidden border border-white/10 bg-slate-950">
               <img
-                src="/circuit_diagram.svg"
-                alt="FARMATRIX Arduino UNO R3 Hardware Circuit Schematic"
+                src={circuitView === "breadboard" ? "/breadboard_diagram.svg" : "/circuit_diagram.svg"}
+                alt={circuitView === "breadboard" ? "Breadboard Layout" : "Electrical Schematic"}
                 className="w-full h-auto object-contain"
               />
             </div>
 
-            {/* Pin Connection Reference */}
+            {/* Breadboard Row-by-Row Quick Guide */}
             <div className="rounded-xl border border-white/10 bg-slate-900/90 p-4 text-xs font-mono space-y-2">
               <div className="font-bold text-white uppercase tracking-wider flex items-center justify-between">
-                <span>Hardware Connection Pin Map</span>
-                <span className="text-amber-400 font-sans text-[11px]">Optical Relay Isolation Active</span>
+                <span>Breadboard Tie-Point Connection Map (Rows 1-30)</span>
+                <span className="text-amber-400 font-sans text-[11px]">Half-Size 400-Point Breadboard</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-slate-300 pt-2 border-t border-white/5">
                 <div>
+                  <strong className="text-sky-400">DHT22 Temperature &amp; Humidity:</strong>
+                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
+                    <li><strong className="text-slate-200">Row 5:</strong> DHT22 Pin 1 (VCC) &rarr; Top Red Rail (+) &amp; 10kΩ Resistor Leg 1</li>
+                    <li><strong className="text-slate-200">Row 6:</strong> DHT22 Pin 2 (DATA) &rarr; Arduino D2 &amp; 10kΩ Resistor Leg 2</li>
+                    <li><strong className="text-slate-200">Row 7:</strong> DHT22 Pin 3 (NC) &rarr; Empty</li>
+                    <li><strong className="text-slate-200">Row 8:</strong> DHT22 Pin 4 (GND) &rarr; Top Blue Rail (-)</li>
+                  </ul>
+                </div>
+                <div>
                   <strong className="text-emerald-400">Capacitive Moisture Sensor v1.2:</strong>
                   <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
-                    <li>VCC &rarr; Arduino 5V</li>
-                    <li>GND &rarr; Arduino GND</li>
-                    <li>AOUT &rarr; Arduino Analog A0</li>
+                    <li><strong className="text-slate-200">Row 14:</strong> Sensor VCC &rarr; Top Red Rail (+)</li>
+                    <li><strong className="text-slate-200">Row 15:</strong> Sensor GND &rarr; Top Blue Rail (-)</li>
+                    <li><strong className="text-slate-200">Row 16:</strong> Sensor AOUT &rarr; Arduino Analog A0</li>
                   </ul>
                 </div>
                 <div>
-                  <strong className="text-sky-400">DHT22 Temp &amp; Humidity:</strong>
+                  <strong className="text-amber-400">5V Relay Module (Logic Side):</strong>
                   <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
-                    <li>Pin 1 (VCC) &rarr; Arduino 5V</li>
-                    <li>Pin 2 (DATA) &rarr; Arduino Digital D2 (with 10kΩ pull-up to VCC)</li>
-                    <li>Pin 4 (GND) &rarr; Arduino GND</li>
+                    <li>Relay VCC &rarr; Breadboard Red Rail (+)</li>
+                    <li>Relay GND &rarr; Breadboard Blue Rail (-)</li>
+                    <li>Relay IN &rarr; Arduino Digital Pin D8</li>
                   </ul>
                 </div>
                 <div>
-                  <strong className="text-amber-400">5V Relay Module (Optoisolated):</strong>
+                  <strong className="text-pink-400">DC Mini Pump &amp; External Battery (Isolated):</strong>
                   <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
-                    <li>VCC &rarr; Arduino 5V &bull; GND &rarr; Arduino GND</li>
-                    <li>IN &rarr; Arduino Digital D8 (Active-Low)</li>
-                    <li>COM &rarr; External 5V Power (+)</li>
-                  </ul>
-                </div>
-                <div>
-                  <strong className="text-pink-400">DC Submersible Mini Pump:</strong>
-                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
-                    <li>Pump (+) &rarr; Relay NO Terminal</li>
-                    <li>Pump (-) &rarr; External 5V Power (-) GND Return</li>
-                    <li>(Isolated from Arduino microcontroller power rail)</li>
+                    <li>Battery (+) &rarr; Relay COM terminal</li>
+                    <li>Relay NO terminal &rarr; Pump Red (+) wire</li>
+                    <li>Battery (-) &rarr; Pump Black (-) wire</li>
+                    <li><span className="text-amber-300">Keep completely isolated from Arduino power!</span></li>
                   </ul>
                 </div>
               </div>
@@ -538,7 +571,7 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
         )}
 
         <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs text-slate-400">
-          <span>Documentation files saved in <code>docs/SYSTEM_DOCUMENTATION.md</code> and <code>docs/CIRCUIT_DIAGRAM.md</code></span>
+          <span>Documentation files saved in <code>docs/BREADBOARD_GUIDE.md</code> and <code>docs/CIRCUIT_DIAGRAM.md</code></span>
           <button
             onClick={onClose}
             className="rounded-xl bg-white/10 px-4 py-2 font-semibold text-white hover:bg-white/20 transition-colors"

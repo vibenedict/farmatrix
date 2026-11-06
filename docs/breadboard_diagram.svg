@@ -1,0 +1,373 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070a13"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="bbGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="unoGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00878F"/>
+      <stop offset="100%" stop-color="#005B60"/>
+    </linearGradient>
+    <linearGradient id="relayGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#172554"/>
+    </linearGradient>
+    <linearGradient id="dhtGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="900" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle Grid -->
+  <g opacity="0.05" stroke="#94a3b8" stroke-width="1">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40"/>
+    </pattern>
+    <rect width="1200" height="900" fill="url(#grid)"/>
+  </g>
+
+  <!-- Title & Header -->
+  <g transform="translate(60, 45)">
+    <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="24" fill="#ffffff" letter-spacing="1">
+      FARMATRIX • PHYSICAL BREADBOARD WIRING GUIDE
+    </text>
+    <text x="0" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#38bdf8" font-weight="600">
+      Visual Prototyping Layout (Half-Size 400-Point Breadboard + Arduino UNO R3 + Optoisolated Relay)
+    </text>
+  </g>
+
+  <!-- ==================== SOLDERLESS BREADBOARD ==================== -->
+  <g transform="translate(60, 110)">
+    <!-- Breadboard Base Plate -->
+    <rect x="0" y="0" width="620" height="420" rx="16" fill="url(#bbGrad)" stroke="#cbd5e1" stroke-width="3" filter="url(#shadow)"/>
+    
+    <!-- Top Power Bus Strip (+ and -) -->
+    <rect x="25" y="20" width="570" height="42" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <!-- Red line (+) -->
+    <line x1="45" y1="32" x2="575" y2="32" stroke="#ef4444" stroke-width="2"/>
+    <text x="32" y="35" font-family="monospace" font-size="12" fill="#ef4444" font-weight="bold">+</text>
+    <text x="582" y="35" font-family="monospace" font-size="12" fill="#ef4444" font-weight="bold">+</text>
+    <!-- Blue line (-) -->
+    <line x1="45" y1="50" x2="575" y2="50" stroke="#3b82f6" stroke-width="2"/>
+    <text x="34" y="53" font-family="monospace" font-size="12" fill="#3b82f6" font-weight="bold">-</text>
+    <text x="584" y="53" font-family="monospace" font-size="12" fill="#3b82f6" font-weight="bold">-</text>
+
+    <!-- Top Tie Points (Power Rails) -->
+    <g fill="#0f172a">
+      <!-- 25 pairs of holes on top rail -->
+      <circle cx="55" cy="32" r="2.5"/><circle cx="75" cy="32" r="2.5"/><circle cx="95" cy="32" r="2.5"/><circle cx="115" cy="32" r="2.5"/><circle cx="135" cy="32" r="2.5"/>
+      <circle cx="165" cy="32" r="2.5"/><circle cx="185" cy="32" r="2.5"/><circle cx="205" cy="32" r="2.5"/><circle cx="225" cy="32" r="2.5"/><circle cx="245" cy="32" r="2.5"/>
+      <circle cx="275" cy="32" r="2.5"/><circle cx="295" cy="32" r="2.5"/><circle cx="315" cy="32" r="2.5"/><circle cx="335" cy="32" r="2.5"/><circle cx="355" cy="32" r="2.5"/>
+      <circle cx="385" cy="32" r="2.5"/><circle cx="405" cy="32" r="2.5"/><circle cx="425" cy="32" r="2.5"/><circle cx="445" cy="32" r="2.5"/><circle cx="465" cy="32" r="2.5"/>
+      <circle cx="495" cy="32" r="2.5"/><circle cx="515" cy="32" r="2.5"/><circle cx="535" cy="32" r="2.5"/><circle cx="555" cy="32" r="2.5"/>
+
+      <circle cx="55" cy="50" r="2.5"/><circle cx="75" cy="50" r="2.5"/><circle cx="95" cy="50" r="2.5"/><circle cx="115" cy="50" r="2.5"/><circle cx="135" cy="50" r="2.5"/>
+      <circle cx="165" cy="50" r="2.5"/><circle cx="185" cy="50" r="2.5"/><circle cx="205" cy="50" r="2.5"/><circle cx="225" cy="50" r="2.5"/><circle cx="245" cy="50" r="2.5"/>
+      <circle cx="275" cy="50" r="2.5"/><circle cx="295" cy="50" r="2.5"/><circle cx="315" cy="50" r="2.5"/><circle cx="335" cy="50" r="2.5"/><circle cx="355" cy="50" r="2.5"/>
+      <circle cx="385" cy="50" r="2.5"/><circle cx="405" cy="50" r="2.5"/><circle cx="425" cy="50" r="2.5"/><circle cx="445" cy="50" r="2.5"/><circle cx="465" cy="50" r="2.5"/>
+      <circle cx="495" cy="50" r="2.5"/><circle cx="515" cy="50" r="2.5"/><circle cx="535" cy="50" r="2.5"/><circle cx="555" cy="50" r="2.5"/>
+    </g>
+
+    <!-- Center Terminal Strip Base (Rows 1 to 30) -->
+    <rect x="25" y="75" width="570" height="270" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    
+    <!-- Center Ravine (Divider Trench) -->
+    <rect x="25" y="202" width="570" height="16" fill="#cbd5e1" opacity="0.6"/>
+
+    <!-- Column labels (a b c d e | f g h i j) -->
+    <g font-family="monospace" font-size="8" fill="#64748b" text-anchor="middle">
+      <text x="40" y="100">a</text><text x="40" y="122">b</text><text x="40" y="144">c</text><text x="40" y="166">d</text><text x="40" y="188">e</text>
+      <text x="40" y="235">f</text><text x="40" y="257">g</text><text x="40" y="279">h</text><text x="40" y="301">i</text><text x="40" y="323">j</text>
+    </g>
+
+    <!-- Representative Breadboard Grid Holes -->
+    <!-- Let's render holes for Row 1 to Row 30 -->
+    <!-- X starts at 60, step 17px -->
+    <!-- Y: a=98, b=120, c=142, d=164, e=186 || f=232, g=254, h=276, i=298, j=320 -->
+    <g fill="#0f172a" opacity="0.8">
+      <!-- We generate rows 1 to 30 markers -->
+      <!-- Row 1: 60, Row 5: 128, Row 6: 145, Row 7: 162, Row 8: 179, Row 12: 247, Row 13: 264, Row 14: 281, Row 20: 383, Row 25: 468, Row 30: 553 -->
+      <!-- Row Labels -->
+      <text x="60" y="88" font-family="monospace" font-size="7" fill="#64748b" text-anchor="middle">1</text>
+      <text x="128" y="88" font-family="monospace" font-size="7" fill="#0284c7" font-weight="bold" text-anchor="middle">5</text>
+      <text x="213" y="88" font-family="monospace" font-size="7" fill="#64748b" text-anchor="middle">10</text>
+      <text x="298" y="88" font-family="monospace" font-size="7" fill="#10b981" font-weight="bold" text-anchor="middle">15</text>
+      <text x="383" y="88" font-family="monospace" font-size="7" fill="#64748b" text-anchor="middle">20</text>
+      <text x="468" y="88" font-family="monospace" font-size="7" fill="#64748b" text-anchor="middle">25</text>
+      <text x="553" y="88" font-family="monospace" font-size="7" fill="#64748b" text-anchor="middle">30</text>
+    </g>
+
+    <!-- Bottom Power Bus Strip (+ and -) -->
+    <rect x="25" y="358" width="570" height="42" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <line x1="45" y1="370" x2="575" y2="370" stroke="#ef4444" stroke-width="2"/>
+    <text x="32" y="373" font-family="monospace" font-size="12" fill="#ef4444" font-weight="bold">+</text>
+    <text x="582" y="373" font-family="monospace" font-size="12" fill="#ef4444" font-weight="bold">+</text>
+    <line x1="45" y1="388" x2="575" y2="388" stroke="#3b82f6" stroke-width="2"/>
+    <text x="34" y="391" font-family="monospace" font-size="12" fill="#3b82f6" font-weight="bold">-</text>
+    <text x="584" y="391" font-family="monospace" font-size="12" fill="#3b82f6" font-weight="bold">-</text>
+
+    <!-- ==================== PLUGGED COMPONENTS ON BREADBOARD ==================== -->
+
+    <!-- 1. DHT22 SENSOR SEATED IN ROWS 5, 6, 7, 8 -->
+    <g transform="translate(112, 105)">
+      <!-- Drop Shadow -->
+      <rect x="0" y="0" width="80" height="90" rx="6" fill="url(#dhtGrad)" stroke="#94a3b8" stroke-width="1.5" filter="url(#shadow)"/>
+      <!-- Grille -->
+      <g fill="#94a3b8">
+        <rect x="15" y="15" width="50" height="3" rx="1"/>
+        <rect x="15" y="23" width="50" height="3" rx="1"/>
+        <rect x="15" y="31" width="50" height="3" rx="1"/>
+        <rect x="15" y="39" width="50" height="3" rx="1"/>
+        <rect x="15" y="47" width="50" height="3" rx="1"/>
+      </g>
+      <text x="40" y="66" font-family="sans-serif" font-weight="bold" font-size="9" fill="#0f172a" text-anchor="middle">DHT22</text>
+      <text x="40" y="78" font-family="sans-serif" font-size="7" fill="#475569" text-anchor="middle">Rows 5-8</text>
+
+      <!-- Pins (Pushed into breadboard holes) -->
+      <!-- Pin 1: Row 5, Pin 2: Row 6, Pin 3: Row 7, Pin 4: Row 8 -->
+      <circle cx="16" cy="98" r="3" fill="#ef4444"/><text x="16" y="110" font-family="monospace" font-size="6" fill="#ef4444" text-anchor="middle">VCC (R5)</text>
+      <circle cx="32" cy="98" r="3" fill="#38bdf8"/><text x="32" y="118" font-family="monospace" font-size="6" fill="#38bdf8" text-anchor="middle">DATA (R6)</text>
+      <circle cx="48" cy="98" r="2.5" fill="#94a3b8"/><text x="48" y="110" font-family="monospace" font-size="6" fill="#64748b" text-anchor="middle">NC (R7)</text>
+      <circle cx="64" cy="98" r="3" fill="#64748b"/><text x="64" y="118" font-family="monospace" font-size="6" fill="#64748b" text-anchor="middle">GND (R8)</text>
+    </g>
+
+    <!-- 2. 10k PULL-UP RESISTOR (Plugs between Row 5 and Row 6) -->
+    <g transform="translate(125, 230)">
+      <!-- Curved Resistor Body -->
+      <path d="M 3 0 Q 15 -18 20 0" fill="none" stroke="#64748b" stroke-width="2"/>
+      <rect x="6" y="-12" width="16" height="8" rx="2" fill="#e2c08d" stroke="#b45309" stroke-width="1"/>
+      <!-- Color bands: Brown, Black, Orange, Gold -->
+      <line x1="8" y1="-12" x2="8" y2="-4" stroke="#78350f" stroke-width="1.5"/>
+      <line x1="11" y1="-12" x2="11" y2="-4" stroke="#000000" stroke-width="1.5"/>
+      <line x1="14" y1="-12" x2="14" y2="-4" stroke="#ea580c" stroke-width="1.5"/>
+      <line x1="18" y1="-12" x2="18" y2="-4" stroke="#d97706" stroke-width="1"/>
+      <!-- Text label -->
+      <text x="14" y="14" font-family="monospace" font-size="7" fill="#b45309" font-weight="bold" text-anchor="middle">10kΩ</text>
+      <text x="14" y="24" font-family="sans-serif" font-size="6" fill="#64748b" text-anchor="middle">Row 5 to 6</text>
+    </g>
+
+    <!-- 3. CAPACITIVE MOISTURE SENSOR 3-PIN HEADER (Seated in Rows 14, 15, 16) -->
+    <g transform="translate(280, 120)">
+      <rect x="0" y="0" width="55" height="22" rx="3" fill="#1e293b" stroke="#334155"/>
+      <circle cx="10" cy="11" r="3" fill="#ef4444"/>
+      <circle cx="27" cy="11" r="3" fill="#64748b"/>
+      <circle cx="44" cy="11" r="3" fill="#10b981"/>
+      <text x="27" y="34" font-family="sans-serif" font-weight="bold" font-size="7" fill="#0f172a" text-anchor="middle">SOIL HEADER</text>
+      <text x="27" y="44" font-family="monospace" font-size="6" fill="#64748b" text-anchor="middle">Rows 14-16</text>
+      <text x="10" y="-4" font-family="monospace" font-size="6" fill="#ef4444" text-anchor="middle">VCC</text>
+      <text x="27" y="-4" font-family="monospace" font-size="6" fill="#64748b" text-anchor="middle">GND</text>
+      <text x="44" y="-4" font-family="monospace" font-size="6" fill="#10b981" text-anchor="middle">A0</text>
+    </g>
+
+    <!-- JUMPER WIRES ON BREADBOARD: -->
+    <!-- Wire 1: Row 5 (DHT22 VCC) to Top Red Rail (+) -->
+    <path d="M 128 100 Q 128 50 135 32" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+    
+    <!-- Wire 2: Row 8 (DHT22 GND) to Top Blue Rail (-) -->
+    <path d="M 179 100 Q 179 65 185 50" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Wire 3: Row 14 (Soil VCC) to Top Red Rail (+) -->
+    <path d="M 290 120 Q 290 55 315 32" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Wire 4: Row 15 (Soil GND) to Top Blue Rail (-) -->
+    <path d="M 307 120 Q 307 70 335 50" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Wire 5: Power Jumper linking Top Red Rail to Bottom Red Rail -->
+    <path d="M 555 32 Q 590 200 555 370" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Wire 6: Power Jumper linking Top Blue Rail to Bottom Blue Rail -->
+    <path d="M 535 50 Q 570 200 535 388" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- ==================== ARDUINO UNO R3 (RIGHT SIDE) ==================== -->
+  <g transform="translate(730, 110)">
+    <!-- Board Base -->
+    <rect x="0" y="0" width="410" height="320" rx="16" fill="url(#unoGrad)" stroke="#004d52" stroke-width="3" filter="url(#shadow)"/>
+    
+    <!-- USB Port -->
+    <rect x="-30" y="30" width="55" height="50" rx="3" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+    <text x="-24" y="60" font-family="monospace" font-size="11" fill="#0f172a" font-weight="bold">USB</text>
+
+    <!-- DC Barrel -->
+    <rect x="-30" y="210" width="55" height="60" rx="4" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+
+    <!-- ATmega328P Chip -->
+    <rect x="140" y="140" width="160" height="55" rx="4" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+    <text x="155" y="172" font-family="monospace" font-size="12" fill="#94a3b8" font-weight="bold">ATmega328P-PU</text>
+
+    <!-- Branding -->
+    <text x="145" y="75" font-family="sans-serif" font-weight="900" font-size="22" fill="#ffffff">ARDUINO</text>
+    <text x="145" y="100" font-family="monospace" font-size="16" fill="#cbd5e1" font-weight="bold">UNO R3</text>
+
+    <!-- Top Digital Header -->
+    <rect x="70" y="10" width="320" height="22" rx="3" fill="#0f172a" stroke="#1e293b"/>
+    <g font-family="monospace" font-size="9" fill="#e2e8f0" text-anchor="middle">
+      <text x="90" y="25">D0</text><text x="115" y="25">D1</text>
+      <text x="140" y="25" fill="#38bdf8" font-weight="bold">D2</text>
+      <text x="165" y="25">D3</text><text x="190" y="25">D4</text><text x="215" y="25">D5</text>
+      <text x="240" y="25">D6</text><text x="265" y="25">D7</text>
+      <text x="290" y="25" fill="#f59e0b" font-weight="bold">D8</text>
+      <text x="315" y="25">D9</text><text x="340" y="25">D10</text><text x="365" y="25">GND</text>
+    </g>
+    <!-- Pin Dots -->
+    <circle cx="140" cy="5" r="4.5" fill="#38bdf8"/>
+    <circle cx="290" cy="5" r="4.5" fill="#f59e0b"/>
+
+    <!-- Bottom Power/Analog Header -->
+    <rect x="70" y="288" width="320" height="22" rx="3" fill="#0f172a" stroke="#1e293b"/>
+    <g font-family="monospace" font-size="9" fill="#e2e8f0" text-anchor="middle">
+      <text x="90" y="303">IO</text><text x="115" y="303">RST</text><text x="140" y="303">3.3V</text>
+      <text x="165" y="303" fill="#ef4444" font-weight="bold">5V</text>
+      <text x="190" y="303" fill="#3b82f6" font-weight="bold">GND</text>
+      <text x="215" y="303">GND</text><text x="240" y="303">VIN</text>
+      <text x="270" y="303" fill="#10b981" font-weight="bold">A0</text>
+      <text x="295" y="303">A1</text><text x="320" y="303">A2</text><text x="345" y="303">A3</text>
+    </g>
+    <!-- Pin Dots -->
+    <circle cx="165" cy="315" r="4.5" fill="#ef4444"/>
+    <circle cx="190" cy="315" r="4.5" fill="#3b82f6"/>
+    <circle cx="270" cy="315" r="4.5" fill="#10b981"/>
+  </g>
+
+  <!-- ==================== WIRING: ARDUINO TO BREADBOARD ==================== -->
+  
+  <!-- WIRE A: Arduino 5V -> Breadboard Bottom Red Rail (+) (Red) -->
+  <path d="M 895 425 Q 750 480 615 480" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- WIRE B: Arduino GND -> Breadboard Bottom Blue Rail (-) (Blue/Black) -->
+  <path d="M 920 425 Q 780 500 595 500" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- WIRE C: DHT22 Data (Row 6) -> Arduino Pin D2 (Sky Blue) -->
+  <path d="M 195 240 Q 300 80 870 115" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- WIRE D: Soil Moisture AOUT (Row 16) -> Arduino Pin A0 (Emerald Green) -->
+  <path d="M 384 130 Q 500 440 1000 425" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- ==================== 5V RELAY MODULE (BOTTOM RIGHT) ==================== -->
+  <g transform="translate(680, 560)">
+    <rect x="0" y="0" width="220" height="280" rx="12" fill="#0f172a" stroke="#334155" stroke-width="2" filter="url(#shadow)"/>
+    
+    <!-- Blue Cube Relay -->
+    <rect x="40" y="35" width="140" height="120" rx="6" fill="url(#relayGrad)" stroke="#3b82f6" stroke-width="2"/>
+    <text x="110" y="75" font-family="sans-serif" font-weight="bold" font-size="14" fill="#ffffff" text-anchor="middle">SONGLE 5V</text>
+    <text x="110" y="98" font-family="monospace" font-size="10" fill="#93c5fd" text-anchor="middle">SRD-05VDC-SL-C</text>
+    <text x="110" y="118" font-family="monospace" font-size="9" fill="#cbd5e1" text-anchor="middle">10A 250VAC • Opto-Isolated</text>
+
+    <!-- Screw Terminals (High Current Pump Side) -->
+    <g transform="translate(35, -15)">
+      <rect x="0" y="0" width="150" height="26" rx="4" fill="#1e293b" stroke="#475569"/>
+      <circle cx="25" cy="13" r="6" fill="#64748b" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="75" cy="13" r="6" fill="#64748b" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="125" cy="13" r="6" fill="#64748b" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="25" y="-5" font-family="monospace" font-size="9" fill="#e2e8f0" font-weight="bold" text-anchor="middle">NO</text>
+      <text x="75" y="-5" font-family="monospace" font-size="9" fill="#e2e8f0" font-weight="bold" text-anchor="middle">COM</text>
+      <text x="125" y="-5" font-family="monospace" font-size="9" fill="#64748b" text-anchor="middle">NC</text>
+    </g>
+
+    <!-- Logic Header (Low Voltage Arduino Side) -->
+    <g transform="translate(45, 230)">
+      <rect x="0" y="0" width="130" height="24" rx="3" fill="#1e293b"/>
+      <circle cx="25" cy="12" r="4" fill="#ef4444"/>
+      <circle cx="65" cy="12" r="4" fill="#3b82f6"/>
+      <circle cx="105" cy="12" r="4" fill="#f59e0b"/>
+      <text x="25" y="38" font-family="monospace" font-size="9" fill="#ef4444" font-weight="bold" text-anchor="middle">VCC</text>
+      <text x="65" y="38" font-family="monospace" font-size="9" fill="#3b82f6" font-weight="bold" text-anchor="middle">GND</text>
+      <text x="105" y="38" font-family="monospace" font-size="9" fill="#f59e0b" font-weight="bold" text-anchor="middle">IN</text>
+    </g>
+  </g>
+
+  <!-- WIRING TO RELAY LOGIC: -->
+  <!-- 1. Arduino D8 -> Relay IN (Orange) -->
+  <path d="M 1020 115 Q 1120 300 785 790" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- 2. Breadboard Bottom Red (+) -> Relay VCC (Red) -->
+  <path d="M 450 500 Q 600 750 705 790" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- 3. Breadboard Bottom Blue (-) -> Relay GND (Blue) -->
+  <path d="M 430 520 Q 600 770 745 790" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- ==================== EXTERNAL BATTERY & PUMP ==================== -->
+  
+  <!-- Battery Pack -->
+  <g transform="translate(980, 560)">
+    <rect x="0" y="0" width="160" height="110" rx="8" fill="#0f172a" stroke="#ec4899" stroke-width="2" filter="url(#shadow)"/>
+    <text x="80" y="35" font-family="sans-serif" font-weight="bold" font-size="12" fill="#ec4899" text-anchor="middle">EXTERNAL BATTERY</text>
+    <text x="80" y="55" font-family="monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">4x AA (5V-6V DC)</text>
+    <text x="80" y="75" font-family="sans-serif" font-size="8" fill="#94a3b8" text-anchor="middle">(Independent Motor Power)</text>
+    <circle cx="40" cy="110" r="5" fill="#ec4899"/>
+    <circle cx="120" cy="110" r="5" fill="#64748b"/>
+    <text x="40" y="125" font-family="monospace" font-size="9" fill="#ec4899" font-weight="bold" text-anchor="middle">+5V</text>
+    <text x="120" y="125" font-family="monospace" font-size="9" fill="#64748b" font-weight="bold" text-anchor="middle">GND</text>
+  </g>
+
+  <!-- Submersible DC Pump -->
+  <g transform="translate(980, 730)">
+    <rect x="0" y="0" width="160" height="110" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="-20" y="40" width="25" height="30" rx="3" fill="#475569"/>
+    <text x="80" y="40" font-family="sans-serif" font-weight="bold" font-size="12" fill="#38bdf8" text-anchor="middle">DC MINI PUMP</text>
+    <text x="80" y="60" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">3V - 5V Submersible</text>
+    <text x="80" y="80" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">Water Output: 1.8 L/min</text>
+    <!-- Wire Terminals -->
+    <circle cx="40" cy="110" r="4" fill="#ec4899"/>
+    <circle cx="120" cy="110" r="4" fill="#64748b"/>
+    <text x="40" y="125" font-family="monospace" font-size="8" fill="#ec4899" text-anchor="middle">Red (+)</text>
+    <text x="120" y="125" font-family="monospace" font-size="8" fill="#64748b" text-anchor="middle">Black (-)</text>
+  </g>
+
+  <!-- HIGH VOLTAGE MOTOR CIRCUIT WIRING (Pink & Slate): -->
+  <!-- 1. Battery (+) -> Relay COM -->
+  <path d="M 1020 670 Q 900 580 755 545" fill="none" stroke="#ec4899" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- 2. Relay NO -> Pump Red (+) -->
+  <path d="M 705 545 Q 650 510 650 780 Q 650 820 1020 840" fill="none" stroke="#ec4899" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- 3. Battery GND (-) -> Pump Black (-) -->
+  <path d="M 1100 670 L 1100 840" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- ==================== SENSOR PROBE OUTSIDE POT ==================== -->
+  <g transform="translate(60, 560)">
+    <rect x="0" y="0" width="540" height="280" rx="12" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+    <text x="30" y="35" font-family="system-ui, sans-serif" font-weight="bold" font-size="14" fill="#ffffff">
+      CAPACITIVE SOIL SENSOR WIRING DETAIL
+    </text>
+    <text x="30" y="55" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">
+      Inserted directly into crop soil (Corrosion-resistant probe with no exposed conductive copper).
+    </text>
+
+    <!-- Probe graphic -->
+    <g transform="translate(40, 80)">
+      <rect x="0" y="0" width="80" height="50" rx="4" fill="#1e293b" stroke="#475569"/>
+      <path d="M 15 50 L 15 150 L 35 170 L 45 170 L 65 150 L 65 50 Z" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+      <text x="40" y="30" font-family="monospace" font-size="8" fill="#cbd5e1" text-anchor="middle">v1.2 PROBE</text>
+      <!-- 3 Pins -->
+      <circle cx="20" cy="5" r="3" fill="#ef4444"/>
+      <circle cx="40" cy="5" r="3" fill="#3b82f6"/>
+      <circle cx="60" cy="5" r="3" fill="#10b981"/>
+    </g>
+
+    <g transform="translate(160, 90)" font-family="monospace" font-size="11" fill="#cbd5e1" space="2">
+      <text x="0" y="20"><tspan fill="#ef4444" font-weight="bold">🔴 VCC Wire:</tspan> Connects to Breadboard Row 14 &rarr; Red (+) Rail (5V)</text>
+      <text x="0" y="50"><tspan fill="#3b82f6" font-weight="bold">🔵 GND Wire:</tspan> Connects to Breadboard Row 15 &rarr; Blue (-) Rail (GND)</text>
+      <text x="0" y="80"><tspan fill="#10b981" font-weight="bold">🟢 AOUT Wire:</tspan> Connects to Breadboard Row 16 &rarr; Arduino Analog A0</text>
+      <text x="0" y="115" font-family="sans-serif" font-size="10" fill="#38bdf8">
+        ✓ Calibrated ADC range: 310 (100% saturation) to 720 (dry air)
+      </text>
+      <text x="0" y="135" font-family="sans-serif" font-size="10" fill="#f59e0b">
+        ✓ Watchdog safeguard: Automated shutoff after 180s continuous pumping
+      </text>
+    </g>
+  </g>
+</svg>
