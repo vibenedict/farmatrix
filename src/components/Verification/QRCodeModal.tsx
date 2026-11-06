@@ -24,7 +24,7 @@ export function QRCodeModal({ isOpen, onClose, batch }: QRCodeModalProps) {
         width: 320,
         margin: 2,
         color: {
-          dark: "#000000",
+          dark: "#0f172a",
           light: "#ffffff",
         },
       })
@@ -52,31 +52,31 @@ export function QRCodeModal({ isOpen, onClose, batch }: QRCodeModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-md rounded-3xl border border-white/15 bg-slate-900 p-6 shadow-2xl space-y-5 text-center">
-        <div className="flex items-center justify-between pb-3 border-b border-white/10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+      <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl space-y-5 text-center">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2 text-left">
-            <QrCode className="h-5 w-5 text-emerald-400" />
+            <QrCode className="h-5 w-5 text-emerald-600" />
             <div>
-              <h3 className="text-sm font-bold text-white">Cryptographic Verification QR</h3>
-              <p className="text-[11px] text-slate-400">Batch: {batch.batchNumber}</p>
+              <h3 className="text-sm font-bold text-slate-900">Cryptographic Verification QR</h3>
+              <p className="text-[11px] text-slate-500">Batch: {batch.batchNumber}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1 text-slate-400 hover:text-white hover:bg-white/10"
+            className="rounded-lg p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
           >
             ✕
           </button>
         </div>
 
         {/* QR Card */}
-        <div className="flex flex-col items-center justify-center rounded-2xl bg-white p-6 shadow-xl">
+        <div className="flex flex-col items-center justify-center rounded-2xl bg-slate-50 border border-slate-200 p-6 shadow-inner">
           {qrDataUrl ? (
             <img
               src={qrDataUrl}
               alt={`QR Code for batch ${batch.batchNumber}`}
-              className="h-56 w-56 object-contain"
+              className="h-56 w-56 object-contain rounded-lg border border-slate-200 shadow-2xs"
             />
           ) : (
             <div className="h-56 w-56 flex items-center justify-center text-slate-500 font-mono text-xs">
@@ -98,17 +98,17 @@ export function QRCodeModal({ isOpen, onClose, batch }: QRCodeModalProps) {
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={handleCopyLink}
-              className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-3 text-xs font-semibold text-slate-200 hover:bg-white/10 transition-colors"
+              className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 py-2 px-3 text-xs font-semibold text-slate-700 transition-colors shadow-2xs"
             >
-              {copied ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+              {copied ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
               <span>{copied ? "Copied Link!" : "Copy URL"}</span>
             </button>
 
             <button
               onClick={handleDownloadQR}
-              className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-3 text-xs font-semibold text-slate-200 hover:bg-white/10 transition-colors"
+              className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 py-2 px-3 text-xs font-semibold text-slate-700 transition-colors shadow-2xs"
             >
-              <Download className="h-3.5 w-3.5" />
+              <Download className="h-3.5 w-3.5 text-slate-400" />
               <span>Download Label</span>
             </button>
           </div>
@@ -116,7 +116,7 @@ export function QRCodeModal({ isOpen, onClose, batch }: QRCodeModalProps) {
           <Link
             href={`/verify/${batch.batchNumber}`}
             target="_blank"
-            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-2.5 px-4 text-xs font-bold text-white shadow-lg shadow-emerald-500/20 hover:from-emerald-400 hover:to-teal-500 transition-all"
+            className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 py-2.5 px-4 text-xs font-bold text-white shadow-xs transition-all"
           >
             <span>Open Consumer Verification Portal</span>
             <ExternalLink className="h-3.5 w-3.5" />

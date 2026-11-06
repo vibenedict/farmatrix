@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
 import { FarmLocation, CropType, QualityGrade, ProductBatch } from "@/lib/types";
-import { Boxes, Sparkles, ShieldCheck, CheckCircle2, ArrowRight } from "lucide-react";
-import { NEAR_CONFIG } from "@/lib/nearClient";
+import { Boxes, Sparkles, ShieldCheck, CheckCircle2 } from "lucide-react";
 
 interface BatchRegisterModalProps {
   isOpen: boolean;
@@ -17,7 +16,6 @@ interface BatchRegisterModalProps {
 export function BatchRegisterModal({
   isOpen,
   onClose,
-  farms,
   selectedFarm,
   onBatchCreated,
 }: BatchRegisterModalProps) {
@@ -78,27 +76,27 @@ export function BatchRegisterModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-xl rounded-3xl border border-white/15 bg-slate-900 shadow-2xl p-6 sm:p-8 space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+      <div className="w-full max-w-xl rounded-3xl border border-slate-200 bg-white shadow-2xl p-6 sm:p-8 space-y-6">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
               <Boxes className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">
+              <h3 className="text-base font-bold text-slate-900">
                 Register Harvest Batch & Mint on NEAR
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Facility: {selectedFarm.name} ({selectedFarm.code})
               </p>
             </div>
           </div>
           <button
             onClick={handleReset}
-            className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-white/10"
+            className="rounded-lg p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
           >
             ✕
           </button>
@@ -107,46 +105,46 @@ export function BatchRegisterModal({
         {/* Success View */}
         {createdBatch ? (
           <div className="space-y-5 text-center py-4">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 ring-8 ring-emerald-500/10">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 ring-8 ring-emerald-50">
               <CheckCircle2 className="h-10 w-10" />
             </div>
 
             <div>
-              <h4 className="text-lg font-bold text-white">
+              <h4 className="text-lg font-bold text-slate-900">
                 Harvest Batch Successfully Minted!
               </h4>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 Committed on NEAR Testnet with SHA-256 cryptographic proof
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-left space-y-2 text-xs font-mono">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left space-y-2 text-xs font-mono">
               <div className="flex justify-between">
-                <span className="text-slate-400">Batch Identifier:</span>
-                <span className="text-white font-bold">{createdBatch.batchNumber}</span>
+                <span className="text-slate-500">Batch Identifier:</span>
+                <span className="text-slate-900 font-bold">{createdBatch.batchNumber}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Crop / Variety:</span>
-                <span className="text-slate-200">{createdBatch.cropName.split(" (")[0]}</span>
+                <span className="text-slate-500">Crop / Variety:</span>
+                <span className="text-slate-800">{createdBatch.cropName.split(" (")[0]}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Certified Quantity:</span>
-                <span className="text-emerald-400 font-bold">{createdBatch.quantityKg.toLocaleString()} kg</span>
+                <span className="text-slate-500">Certified Quantity:</span>
+                <span className="text-emerald-700 font-bold">{createdBatch.quantityKg.toLocaleString()} kg</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">NEAR Transaction Hash:</span>
-                <span className="text-[#00ec97] truncate max-w-[200px]">{createdBatch.blockchainTxHash}</span>
+                <span className="text-slate-500">NEAR Transaction Hash:</span>
+                <span className="text-emerald-700 truncate max-w-[200px] font-bold">{createdBatch.blockchainTxHash}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Data Hash (SHA-256):</span>
-                <span className="text-slate-400 truncate max-w-[200px]">{createdBatch.dataHash}</span>
+                <span className="text-slate-500">Data Hash (SHA-256):</span>
+                <span className="text-slate-600 truncate max-w-[200px]">{createdBatch.dataHash}</span>
               </div>
             </div>
 
             <div className="flex justify-end gap-3 pt-2">
               <button
                 onClick={handleReset}
-                className="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-2.5 text-xs font-bold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-400 hover:to-teal-500 transition-all"
+                className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 py-2.5 text-xs font-bold text-white shadow-xs transition-all"
               >
                 View Batch in Registry
               </button>
@@ -157,11 +155,11 @@ export function BatchRegisterModal({
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Crop Type</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Crop Type</label>
                 <select
                   value={cropName}
                   onChange={(e) => setCropName(e.target.value as CropType)}
-                  className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-emerald-600 focus:outline-none"
                 >
                   <option value="Heirloom Tomato (Solanum lycopersicum)">Heirloom Tomato</option>
                   <option value="Yellow Dent Maize (Zea mays)">Yellow Dent Maize</option>
@@ -171,18 +169,18 @@ export function BatchRegisterModal({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Cultivar / Variety</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Cultivar / Variety</label>
                 <input
                   type="text"
                   value={variety}
                   onChange={(e) => setVariety(e.target.value)}
                   required
-                  className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-emerald-600 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Harvested Quantity (kg)</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Harvested Quantity (kg)</label>
                 <input
                   type="number"
                   min="10"
@@ -190,16 +188,16 @@ export function BatchRegisterModal({
                   value={quantityKg}
                   onChange={(e) => setQuantityKg(Number(e.target.value))}
                   required
-                  className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-xs text-white font-mono focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 font-mono focus:border-emerald-600 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Quality Grade</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Quality Grade</label>
                 <select
                   value={qualityGrade}
                   onChange={(e) => setQualityGrade(e.target.value as QualityGrade)}
-                  className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-emerald-600 focus:outline-none"
                 >
                   <option value="Grade A+ (Export Certified)">Grade A+ (Export Certified)</option>
                   <option value="Grade A (Premium Retail)">Grade A (Premium Retail)</option>
@@ -209,7 +207,7 @@ export function BatchRegisterModal({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-slate-700 mb-1">
                 Authorized NEAR Signer Account
               </label>
               <input
@@ -217,34 +215,34 @@ export function BatchRegisterModal({
                 value={farmerNearAccount}
                 onChange={(e) => setFarmerNearAccount(e.target.value)}
                 required
-                className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-xs text-emerald-400 font-mono focus:border-emerald-500 focus:outline-none"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-emerald-800 font-mono font-semibold focus:border-emerald-600 focus:outline-none"
               />
             </div>
 
             {/* Smart Contract Commitment Note */}
-            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-xs text-slate-300 flex items-start gap-2.5">
-              <ShieldCheck className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3 text-xs text-slate-700 flex items-start gap-2.5">
+              <ShieldCheck className="h-4 w-4 text-emerald-600 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-white">NEAR Smart Contract Commitment</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
+                <div className="font-bold text-slate-900">NEAR Smart Contract Commitment</div>
+                <div className="text-[11px] text-slate-600 mt-0.5">
                   Submitting will compute a canonical SHA-256 digest and invoke{" "}
-                  <code className="text-[#00ec97] font-mono">register_batch()</code> on the FARMATRIX contract.
+                  <code className="text-emerald-700 font-mono font-bold">register_batch()</code> on the FARMATRIX contract.
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-3 border-t border-white/10">
+            <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-xl px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white"
+                className="rounded-xl px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-emerald-500/20 hover:from-emerald-400 hover:to-teal-500 disabled:opacity-50 transition-all"
+                className="flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-5 py-2.5 text-xs font-bold text-white shadow-xs disabled:opacity-50 transition-all"
               >
                 {loading ? (
                   <span>Minting on NEAR Blockchain...</span>

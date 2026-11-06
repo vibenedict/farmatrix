@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Terminal, Copy, CheckCircle2, Download, Code2, Cpu, Database, Blocks, Zap, ExternalLink, Layers } from "lucide-react";
+import { Terminal, Copy, CheckCircle2, Download, Code2, Cpu, Database, Blocks, Zap } from "lucide-react";
 
 interface HardwareGatewayModalProps {
   isOpen: boolean;
@@ -379,49 +379,49 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-5xl rounded-3xl border border-white/15 bg-slate-900 shadow-2xl p-6 sm:p-8 space-y-5 flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+      <div className="w-full max-w-5xl rounded-3xl border border-slate-200 bg-white shadow-2xl p-6 sm:p-8 space-y-5 flex flex-col max-h-[92vh]">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
               <Code2 className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">
+              <h3 className="text-base font-bold text-slate-900">
                 Developer Hub, Breadboard Layout &amp; Source Code
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Arduino UNO R3 breadboard layout, C++ firmware, Node.js gateway, NEAR Rust contract, and Supabase DDL
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-white/10"
+            className="rounded-lg p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
           >
             ✕
           </button>
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-          <div className="flex flex-wrap items-center gap-1 rounded-xl bg-black/40 p-1 border border-white/5">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div className="flex flex-wrap items-center gap-1 rounded-xl bg-slate-100 p-1 border border-slate-200">
             <button
               onClick={() => setActiveTab("circuit")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                activeTab === "circuit" ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20" : "text-slate-400 hover:text-white"
+                activeTab === "circuit" ? "bg-white text-emerald-950 font-bold shadow-2xs" : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              <Zap className="h-3.5 w-3.5" />
+              <Zap className="h-3.5 w-3.5 text-emerald-600" />
               <span>Circuit &amp; Breadboard Diagram</span>
             </button>
 
             <button
               onClick={() => setActiveTab("arduino")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                activeTab === "arduino" ? "bg-emerald-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                activeTab === "arduino" ? "bg-white text-emerald-950 font-bold shadow-2xs" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               <Cpu className="h-3.5 w-3.5" />
@@ -431,7 +431,7 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
             <button
               onClick={() => setActiveTab("gateway")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                activeTab === "gateway" ? "bg-cyan-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                activeTab === "gateway" ? "bg-white text-slate-950 font-bold shadow-2xs" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               <Terminal className="h-3.5 w-3.5" />
@@ -441,7 +441,7 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
             <button
               onClick={() => setActiveTab("contract")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                activeTab === "contract" ? "bg-indigo-500 text-white font-bold" : "text-slate-400 hover:text-white"
+                activeTab === "contract" ? "bg-white text-slate-950 font-bold shadow-2xs" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               <Blocks className="h-3.5 w-3.5" />
@@ -451,7 +451,7 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
             <button
               onClick={() => setActiveTab("database")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                activeTab === "database" ? "bg-teal-500 text-slate-950 font-bold" : "text-slate-400 hover:text-white"
+                activeTab === "database" ? "bg-white text-slate-950 font-bold shadow-2xs" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               <Database className="h-3.5 w-3.5" />
@@ -462,15 +462,15 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10 transition-colors"
+              className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors shadow-2xs"
             >
-              {copied ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+              {copied ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
               <span>{copied ? "Copied" : "Copy"}</span>
             </button>
 
             <button
               onClick={handleDownload}
-              className="flex items-center gap-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 px-3 py-1.5 text-xs font-semibold text-emerald-300 transition-colors"
+              className="flex items-center gap-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 text-xs font-semibold text-emerald-800 transition-colors"
             >
               <Download className="h-3.5 w-3.5" />
               <span>{activeTab === "circuit" ? "Download SVG" : "Download File"}</span>
@@ -480,18 +480,18 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
 
         {/* Tab Content */}
         {activeTab === "circuit" ? (
-          <div className="flex-1 overflow-y-auto rounded-2xl border border-white/10 bg-black/90 p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-4">
             
             {/* View Sub-Toggle: Breadboard vs Schematic */}
-            <div className="flex items-center justify-between bg-slate-900/90 rounded-xl p-2 border border-white/10">
-              <span className="text-xs font-semibold text-slate-300 pl-2">Select Circuit View:</span>
+            <div className="flex items-center justify-between bg-white rounded-xl p-2 border border-slate-200 shadow-2xs">
+              <span className="text-xs font-semibold text-slate-600 pl-2">Select Circuit View:</span>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setCircuitView("breadboard")}
                   className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
                     circuitView === "breadboard"
-                      ? "bg-amber-500 text-slate-950 shadow-sm"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-emerald-600 text-white shadow-2xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   🍞 Breadboard Prototyping View
@@ -500,8 +500,8 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
                   onClick={() => setCircuitView("schematic")}
                   className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
                     circuitView === "schematic"
-                      ? "bg-amber-500 text-slate-950 shadow-sm"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-emerald-600 text-white shadow-2xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   ⚡ Electrical Schematic View
@@ -510,7 +510,7 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
             </div>
 
             {/* Render Selected Diagram */}
-            <div className="rounded-xl overflow-hidden border border-white/10 bg-slate-950">
+            <div className="rounded-xl overflow-hidden border border-slate-200 bg-white p-2 shadow-2xs">
               <img
                 src={circuitView === "breadboard" ? "/breadboard_diagram.svg" : "/circuit_diagram.svg"}
                 alt={circuitView === "breadboard" ? "Breadboard Layout" : "Electrical Schematic"}
@@ -519,62 +519,62 @@ CREATE TABLE IF NOT EXISTS supply_chain_events (
             </div>
 
             {/* Breadboard Row-by-Row Quick Guide */}
-            <div className="rounded-xl border border-white/10 bg-slate-900/90 p-4 text-xs font-mono space-y-2">
-              <div className="font-bold text-white uppercase tracking-wider flex items-center justify-between">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 text-xs font-mono space-y-2 shadow-2xs">
+              <div className="font-bold text-slate-900 uppercase tracking-wider flex items-center justify-between">
                 <span>Breadboard Tie-Point Connection Map (Rows 1-30)</span>
-                <span className="text-amber-400 font-sans text-[11px]">Half-Size 400-Point Breadboard</span>
+                <span className="text-emerald-700 font-sans text-[11px] font-bold">Half-Size 400-Point Breadboard</span>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-slate-300 pt-2 border-t border-white/5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-slate-700 pt-2 border-t border-slate-100">
                 <div>
-                  <strong className="text-sky-400">DHT22 Temperature &amp; Humidity:</strong>
-                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
-                    <li><strong className="text-slate-200">Row 5:</strong> DHT22 Pin 1 (VCC) &rarr; Top Red Rail (+) &amp; 10kΩ Resistor Leg 1</li>
-                    <li><strong className="text-slate-200">Row 6:</strong> DHT22 Pin 2 (DATA) &rarr; Arduino D2 &amp; 10kΩ Resistor Leg 2</li>
-                    <li><strong className="text-slate-200">Row 7:</strong> DHT22 Pin 3 (NC) &rarr; Empty</li>
-                    <li><strong className="text-slate-200">Row 8:</strong> DHT22 Pin 4 (GND) &rarr; Top Blue Rail (-)</li>
+                  <strong className="text-emerald-800">DHT22 Temperature &amp; Humidity:</strong>
+                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-600">
+                    <li><strong className="text-slate-900">Row 5:</strong> DHT22 Pin 1 (VCC) &rarr; Top Red Rail (+) &amp; 10kΩ Resistor Leg 1</li>
+                    <li><strong className="text-slate-900">Row 6:</strong> DHT22 Pin 2 (DATA) &rarr; Arduino D2 &amp; 10kΩ Resistor Leg 2</li>
+                    <li><strong className="text-slate-900">Row 7:</strong> DHT22 Pin 3 (NC) &rarr; Empty</li>
+                    <li><strong className="text-slate-900">Row 8:</strong> DHT22 Pin 4 (GND) &rarr; Top Blue Rail (-)</li>
                   </ul>
                 </div>
                 <div>
-                  <strong className="text-emerald-400">Capacitive Moisture Sensor v1.2:</strong>
-                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
-                    <li><strong className="text-slate-200">Row 14:</strong> Sensor VCC &rarr; Top Red Rail (+)</li>
-                    <li><strong className="text-slate-200">Row 15:</strong> Sensor GND &rarr; Top Blue Rail (-)</li>
-                    <li><strong className="text-slate-200">Row 16:</strong> Sensor AOUT &rarr; Arduino Analog A0</li>
+                  <strong className="text-emerald-800">Capacitive Moisture Sensor v1.2:</strong>
+                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-600">
+                    <li><strong className="text-slate-900">Row 14:</strong> Sensor VCC &rarr; Top Red Rail (+)</li>
+                    <li><strong className="text-slate-900">Row 15:</strong> Sensor GND &rarr; Top Blue Rail (-)</li>
+                    <li><strong className="text-slate-900">Row 16:</strong> Sensor AOUT &rarr; Arduino Analog A0</li>
                   </ul>
                 </div>
                 <div>
-                  <strong className="text-amber-400">5V Relay Module (Logic Side):</strong>
-                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
+                  <strong className="text-emerald-800">5V Relay Module (Logic Side):</strong>
+                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-600">
                     <li>Relay VCC &rarr; Breadboard Red Rail (+)</li>
                     <li>Relay GND &rarr; Breadboard Blue Rail (-)</li>
                     <li>Relay IN &rarr; Arduino Digital Pin D8</li>
                   </ul>
                 </div>
                 <div>
-                  <strong className="text-pink-400">DC Mini Pump &amp; External Battery (Isolated):</strong>
-                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-400">
+                  <strong className="text-emerald-800">DC Mini Pump &amp; External Battery (Isolated):</strong>
+                  <ul className="list-disc pl-4 mt-1 text-[11px] text-slate-600">
                     <li>Battery (+) &rarr; Relay COM terminal</li>
                     <li>Relay NO terminal &rarr; Pump Red (+) wire</li>
                     <li>Battery (-) &rarr; Pump Black (-) wire</li>
-                    <li><span className="text-amber-300">Keep completely isolated from Arduino power!</span></li>
+                    <li><span className="text-rose-700 font-bold">Keep completely isolated from Arduino power!</span></li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto rounded-2xl border border-white/10 bg-black/90 p-4 font-mono text-xs text-slate-300">
+          <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-950 p-4 font-mono text-xs text-slate-300">
             <pre className="whitespace-pre overflow-x-auto leading-relaxed">
               {codeSnippets[activeTab]}
             </pre>
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs text-slate-400">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
           <span>Documentation files saved in <code>docs/BREADBOARD_GUIDE.md</code> and <code>docs/CIRCUIT_DIAGRAM.md</code></span>
           <button
             onClick={onClose}
-            className="rounded-xl bg-white/10 px-4 py-2 font-semibold text-white hover:bg-white/20 transition-colors"
+            className="rounded-xl bg-slate-100 hover:bg-slate-200 px-4 py-2 font-semibold text-slate-800 transition-colors"
           >
             Close Hub
           </button>

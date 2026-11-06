@@ -3,18 +3,10 @@
 import React, { useState } from "react";
 import { ProductBatch } from "@/lib/types";
 import { 
-  Boxes, 
   Search, 
-  Filter, 
   QrCode, 
   ExternalLink, 
-  ShieldCheck, 
-  CheckCircle2, 
-  Calendar, 
-  Droplet, 
-  Leaf, 
-  GitFork,
-  ArrowUpRight
+  GitFork
 } from "lucide-react";
 import { NEAR_CONFIG } from "@/lib/nearClient";
 
@@ -54,20 +46,20 @@ export function BatchList({
             placeholder="Search by batch number, crop variety, or facility..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-slate-900/80 pl-9 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:border-emerald-500 focus:outline-none backdrop-blur-md"
+            className="w-full rounded-xl border border-slate-200 bg-white pl-9 pr-4 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none shadow-2xs"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center rounded-xl bg-slate-900/80 p-1 border border-white/10">
+          <div className="flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200">
             {["ALL", "IN_TRANSIT", "STORED", "RETAIL_READY"].map((s) => (
               <button
                 key={s}
                 onClick={() => setStatusFilter(s)}
                 className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors ${
                   statusFilter === s
-                    ? "bg-emerald-500 text-slate-950 shadow-sm"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-white text-emerald-950 shadow-2xs font-bold"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {s === "ALL" ? "All Batches" : s.replace("_", " ")}
@@ -77,7 +69,7 @@ export function BatchList({
 
           <button
             onClick={onOpenNewBatchModal}
-            className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-3.5 py-2 text-xs font-bold text-white shadow-md shadow-emerald-500/20 hover:from-emerald-400 hover:to-teal-500 transition-all flex items-center gap-1.5"
+            className="rounded-xl bg-emerald-600 hover:bg-emerald-700 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition-all flex items-center gap-1.5"
           >
             <span>+ New Batch</span>
           </button>
@@ -87,63 +79,63 @@ export function BatchList({
       {/* Grid of Batches */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filtered.map((batch) => {
-          let statusBadge = "bg-sky-500/10 text-sky-400 border-sky-500/20";
-          if (batch.status === "STORED") statusBadge = "bg-amber-500/10 text-amber-400 border-amber-500/20";
-          if (batch.status === "RETAIL_READY") statusBadge = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+          let statusBadge = "bg-sky-50 text-sky-800 border-sky-200";
+          if (batch.status === "STORED") statusBadge = "bg-amber-50 text-amber-800 border-amber-200";
+          if (batch.status === "RETAIL_READY") statusBadge = "bg-emerald-50 text-emerald-800 border-emerald-200";
 
           return (
             <div
               key={batch.id}
-              className="group relative flex flex-col justify-between rounded-2xl border border-white/10 bg-gradient-to-b from-slate-900/90 to-slate-950/90 p-5 shadow-xl hover:border-emerald-500/40 transition-all duration-300"
+              className="group relative flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs hover:border-emerald-300 hover:shadow-md transition-all duration-200"
             >
               <div>
                 {/* Top Badge & Identifier */}
-                <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                   <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${statusBadge}`}>
                     {batch.status.replace("_", " ")}
                   </span>
-                  <span className="font-mono text-xs font-bold text-slate-300">
+                  <span className="font-mono text-xs font-bold text-slate-700">
                     {batch.batchNumber}
                   </span>
                 </div>
 
                 {/* Crop & Farm */}
                 <div className="mt-3">
-                  <h4 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <h4 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
                     {batch.cropName.split(" (")[0]}
                   </h4>
-                  <p className="text-xs text-slate-400 mt-0.5 font-medium">{batch.variety}</p>
-                  <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+                  <p className="text-xs text-slate-600 mt-0.5 font-medium">{batch.variety}</p>
+                  <p className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
                     <span>Facility:</span>
-                    <span className="text-slate-300">{batch.farmName}</span>
+                    <span className="text-slate-800 font-medium">{batch.farmName}</span>
                   </p>
                 </div>
 
                 {/* Agronomic & ESG Metrics */}
-                <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-black/40 p-3 text-xs border border-white/5 font-mono">
+                <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-slate-50 p-3 text-xs border border-slate-100 font-mono">
                   <div>
-                    <span className="text-[10px] text-slate-400 block">Quantity</span>
-                    <span className="text-white font-bold">{batch.quantityKg.toLocaleString()} kg</span>
+                    <span className="text-[10px] text-slate-500 block">Quantity</span>
+                    <span className="text-slate-900 font-bold">{batch.quantityKg.toLocaleString()} kg</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block">Quality Grade</span>
-                    <span className="text-emerald-400 font-bold truncate block">{batch.qualityGrade.split(" ")[0]}</span>
+                    <span className="text-[10px] text-slate-500 block">Quality Grade</span>
+                    <span className="text-emerald-700 font-bold truncate block">{batch.qualityGrade.split(" ")[0]}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block">Water Index</span>
-                    <span className="text-cyan-400">{batch.waterEfficiencyIndex} L/kg</span>
+                    <span className="text-[10px] text-slate-500 block">Water Index</span>
+                    <span className="text-slate-700 font-medium">{batch.waterEfficiencyIndex} L/kg</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block">Carbon Footprint</span>
-                    <span className="text-teal-400">{batch.carbonFootprintKgCO2} kg CO₂</span>
+                    <span className="text-[10px] text-slate-500 block">Carbon Footprint</span>
+                    <span className="text-slate-700 font-medium">{batch.carbonFootprintKgCO2} kg CO₂</span>
                   </div>
                 </div>
 
                 {/* On-Chain Commitment Info */}
-                <div className="mt-3 text-[11px] text-slate-400 space-y-1">
+                <div className="mt-3 text-[11px] text-slate-500 space-y-1">
                   <div className="flex items-center justify-between">
                     <span>NEAR Signer:</span>
-                    <span className="font-mono text-[#00ec97] text-[10px]">{batch.farmerNearAccount}</span>
+                    <span className="font-mono text-emerald-700 text-[10px] font-semibold">{batch.farmerNearAccount}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Tx Commitment:</span>
@@ -151,28 +143,28 @@ export function BatchList({
                       href={`${NEAR_CONFIG.explorerUrl}/txns/${batch.blockchainTxHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-mono text-slate-300 hover:text-white truncate max-w-[140px] flex items-center gap-1"
+                      className="font-mono text-slate-700 hover:text-emerald-700 truncate max-w-[140px] flex items-center gap-1"
                     >
                       {batch.blockchainTxHash.substring(0, 12)}...
-                      <ExternalLink className="h-2.5 w-2.5" />
+                      <ExternalLink className="h-2.5 w-2.5 text-slate-400" />
                     </a>
                   </div>
                 </div>
               </div>
 
               {/* Actions Footer */}
-              <div className="mt-5 pt-3 border-t border-white/10 flex items-center gap-2">
+              <div className="mt-5 pt-3 border-t border-slate-100 flex items-center gap-2">
                 <button
                   onClick={() => onOpenQR(batch)}
-                  className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 px-3 text-xs font-semibold text-slate-200 hover:bg-white/10 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 py-2 px-3 text-xs font-semibold text-slate-700 transition-colors shadow-2xs"
                 >
-                  <QrCode className="h-3.5 w-3.5 text-emerald-400" />
+                  <QrCode className="h-3.5 w-3.5 text-emerald-600" />
                   <span>View QR</span>
                 </button>
 
                 <button
                   onClick={() => onSelectBatchForTimeline(batch)}
-                  className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 py-2 px-3 text-xs font-bold text-emerald-300 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 py-2 px-3 text-xs font-bold text-emerald-800 transition-colors shadow-2xs"
                 >
                   <GitFork className="h-3.5 w-3.5" />
                   <span>Track Timeline</span>

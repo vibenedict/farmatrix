@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Droplets, Thermometer, Wind, Sun, AlertTriangle, ShieldCheck, Zap } from "lucide-react";
+import { Droplets, Thermometer, Wind, Sun } from "lucide-react";
 
 interface LiveGaugeProps {
   title: string;
@@ -33,63 +33,54 @@ export function LiveGauge({
   const strokeDashoffset = circumference - (percentage / 100) * circumference * 0.75; // 270 degree arc
 
   let colorScheme = {
-    stroke: "#10b981", // emerald
-    bgGlow: "from-emerald-500/20 to-teal-500/5",
+    stroke: "#059669", // rich emerald
     icon: Droplets,
-    statusColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+    badgeBg: "bg-emerald-50 text-emerald-800 border-emerald-200",
   };
 
   if (type === "temp") {
     colorScheme = {
-      stroke: value > 32 ? "#f59e0b" : "#38bdf8",
-      bgGlow: "from-amber-500/20 to-orange-500/5",
+      stroke: value > 32 ? "#d97706" : "#0284c7",
       icon: Thermometer,
-      statusColor: value > 32 ? "text-amber-400 bg-amber-500/10 border-amber-500/20" : "text-sky-400 bg-sky-500/10 border-sky-500/20",
+      badgeBg: value > 32 ? "bg-amber-50 text-amber-800 border-amber-200" : "bg-sky-50 text-sky-800 border-sky-200",
     };
   } else if (type === "humidity") {
     colorScheme = {
-      stroke: "#06b6d4",
-      bgGlow: "from-cyan-500/20 to-blue-500/5",
+      stroke: "#0891b2",
       icon: Wind,
-      statusColor: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+      badgeBg: "bg-cyan-50 text-cyan-800 border-cyan-200",
     };
   } else if (type === "light") {
     colorScheme = {
-      stroke: "#eab308",
-      bgGlow: "from-yellow-500/20 to-amber-500/5",
+      stroke: "#ca8a04",
       icon: Sun,
-      statusColor: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
+      badgeBg: "bg-yellow-50 text-yellow-800 border-yellow-200",
     };
   } else if (type === "water") {
     colorScheme = {
-      stroke: "#6366f1",
-      bgGlow: "from-indigo-500/20 to-blue-500/5",
+      stroke: "#2563eb",
       icon: Droplets,
-      statusColor: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+      badgeBg: "bg-blue-50 text-blue-800 border-blue-200",
     };
   }
 
   const Icon = colorScheme.icon;
 
-  // Determine if in target
   let isOptimal = true;
   if (targetRange) {
     isOptimal = value >= targetRange[0] && value <= targetRange[1];
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-slate-900/80 to-slate-950/80 p-4 shadow-xl backdrop-blur-xl">
-      {/* Background ambient radial glow */}
-      <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br ${colorScheme.bgGlow} blur-2xl pointer-events-none`} />
-
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
       <div className="relative z-10 flex items-start justify-between">
         <div>
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{title}</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{title}</span>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-2xl lg:text-3xl font-extrabold tracking-tight text-white font-mono">
+            <span className="text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 font-mono">
               {value}
             </span>
-            <span className="text-xs font-semibold text-slate-400 font-mono">{unit}</span>
+            <span className="text-xs font-bold text-slate-500 font-mono">{unit}</span>
           </div>
           {subValue && (
             <div className="mt-0.5 text-[11px] text-slate-400 font-mono">{subValue}</div>
@@ -104,7 +95,7 @@ export function LiveGauge({
               cx="50"
               cy="50"
               r={radius}
-              stroke="rgba(255,255,255,0.08)"
+              stroke="#e2e8f0"
               strokeWidth="8"
               fill="none"
               strokeDasharray={circumference * 0.75}
@@ -126,26 +117,26 @@ export function LiveGauge({
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <Icon className="h-5 w-5 text-slate-300" />
+            <Icon className="h-5 w-5 text-slate-500" />
           </div>
         </div>
       </div>
 
       {/* Target range indicator bar */}
-      <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3">
+      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
         <div className="flex items-center gap-1.5">
           {isOptimal ? (
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 ring-2 ring-emerald-500/20" />
+            <span className="flex h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100" />
           ) : (
-            <span className="flex h-2 w-2 rounded-full bg-amber-400 ring-2 ring-amber-500/20" />
+            <span className="flex h-2 w-2 rounded-full bg-amber-500 ring-2 ring-amber-100" />
           )}
-          <span className="text-[11px] text-slate-300 font-medium">
+          <span className="text-[11px] text-slate-700 font-semibold">
             {statusText || (isOptimal ? "In Optimal Range" : "Threshold Trigger")}
           </span>
         </div>
 
         {targetRange && (
-          <span className="text-[10px] text-slate-400 font-mono">
+          <span className="text-[10px] text-slate-400 font-mono font-medium">
             Target: {targetRange[0]}-{targetRange[1]}{unit}
           </span>
         )}

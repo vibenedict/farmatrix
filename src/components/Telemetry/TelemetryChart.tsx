@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { SensorReading } from "@/lib/types";
-import { Activity, Clock, Zap, Info } from "lucide-react";
+import { Activity, Clock } from "lucide-react";
 
 interface TelemetryChartProps {
   readings: SensorReading[];
@@ -34,7 +34,7 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
     return padding.top + (1 - clamped / 100) * graphHeight;
   };
 
-  // For Temp & Hum: Temp 10C - 45C, Hum 0% - 100%
+  // For Temp & Hum: Temp 15C - 45C, Hum 0% - 100%
   const getYTemp = (val: number) => {
     const min = 15;
     const max = 45;
@@ -66,29 +66,29 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
   const hoveredItem = hoverIndex !== null ? data[hoverIndex] : data[data.length - 1];
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-slate-900/90 to-slate-950/90 p-5 shadow-xl backdrop-blur-xl">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
       {/* Header with Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
         <div>
           <div className="flex items-center gap-2">
-            <Activity className="h-4 w-4 text-emerald-400" />
-            <h3 className="text-sm font-bold text-white tracking-wide">
+            <Activity className="h-4 w-4 text-emerald-600" />
+            <h3 className="text-sm font-bold text-slate-900 tracking-wide">
               Real-Time IoT Telemetry Stream (Arduino UNO R3)
             </h3>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Continuous soil-climate monitoring with automated threshold triggers & relay actuation
           </p>
         </div>
 
         {/* Tab switcher */}
-        <div className="flex items-center gap-1 rounded-xl bg-black/40 p-1 border border-white/5">
+        <div className="flex items-center gap-1 rounded-xl bg-slate-100 p-1 border border-slate-200">
           <button
             onClick={() => setActiveMetric("moisture")}
             className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
               activeMetric === "moisture"
-                ? "bg-emerald-500 text-slate-950 shadow-sm"
-                : "text-slate-400 hover:text-white"
+                ? "bg-white text-emerald-900 shadow-2xs font-bold"
+                : "text-slate-600 hover:text-slate-900"
             }`}
           >
             Soil Moisture (%)
@@ -97,8 +97,8 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
             onClick={() => setActiveMetric("temp_hum")}
             className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
               activeMetric === "temp_hum"
-                ? "bg-sky-500 text-slate-950 shadow-sm"
-                : "text-slate-400 hover:text-white"
+                ? "bg-white text-slate-900 shadow-2xs font-bold"
+                : "text-slate-600 hover:text-slate-900"
             }`}
           >
             DHT22 Temp & Humidity
@@ -114,15 +114,10 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
           onMouseLeave={() => setHoverIndex(null)}
         >
           <defs>
-            {/* Gradient for Moisture Area */}
-            <linearGradient id="moistureGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#10b981" stopOpacity="0.35" />
+            {/* Soft Green Area Gradient */}
+            <linearGradient id="moistureGradientLight" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
               <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
-            </linearGradient>
-
-            <linearGradient id="tempGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
@@ -136,14 +131,14 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
                   y1={y}
                   x2={width - padding.right}
                   y2={y}
-                  stroke="rgba(255,255,255,0.06)"
+                  stroke="#e2e8f0"
                   strokeDasharray="4 4"
                 />
                 <text
                   x={padding.left - 10}
                   y={y + 3}
                   textAnchor="end"
-                  className="fill-slate-500 text-[10px] font-mono"
+                  className="fill-slate-400 text-[10px] font-mono"
                 >
                   {level}%
                 </text>
@@ -159,7 +154,7 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
                 y1={lowThresholdY}
                 x2={width - padding.right}
                 y2={lowThresholdY}
-                stroke="#f43f5e"
+                stroke="#e11d48"
                 strokeWidth="1.5"
                 strokeDasharray="6 4"
               />
@@ -167,7 +162,7 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
                 x={width - padding.right}
                 y={lowThresholdY - 6}
                 textAnchor="end"
-                className="fill-rose-400 text-[10px] font-mono font-semibold"
+                className="fill-rose-600 text-[10px] font-mono font-bold"
               >
                 Pump Trigger Threshold (&lt;{lowThreshold}%)
               </text>
@@ -178,7 +173,7 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
                 y1={highThresholdY}
                 x2={width - padding.right}
                 y2={highThresholdY}
-                stroke="#06b6d4"
+                stroke="#0284c7"
                 strokeWidth="1.5"
                 strokeDasharray="6 4"
               />
@@ -186,19 +181,19 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
                 x={width - padding.right}
                 y={highThresholdY - 6}
                 textAnchor="end"
-                className="fill-cyan-400 text-[10px] font-mono font-semibold"
+                className="fill-sky-700 text-[10px] font-mono font-bold"
               >
                 Cutoff Threshold (&gt;{highThreshold}%)
               </text>
 
               {/* Filled area */}
-              <path d={moistureArea} fill="url(#moistureGradient)" />
+              <path d={moistureArea} fill="url(#moistureGradientLight)" />
 
               {/* Smooth Moisture Line */}
               <path
                 d={moisturePath}
                 fill="none"
-                stroke="#10b981"
+                stroke="#059669"
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -215,61 +210,49 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
                       cx={cx}
                       cy={cy}
                       r={isPumpOn ? 5 : 3}
-                      fill={isPumpOn ? "#00ec97" : "#10b981"}
-                      stroke="#0f172a"
+                      fill={isPumpOn ? "#047857" : "#059669"}
+                      stroke="#ffffff"
                       strokeWidth="2"
                     />
-                    {isPumpOn && (
-                      <circle
-                        cx={cx}
-                        cy={cy}
-                        r="8"
-                        fill="none"
-                        stroke="#00ec97"
-                        strokeWidth="1"
-                        className="animate-ping opacity-75"
-                      />
-                    )}
                   </g>
                 );
               })}
             </>
           ) : (
             <>
-              {/* Temperature line (Sky Blue) */}
+              {/* Temperature line */}
               <path
                 d={tempPath}
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#0284c7"
                 strokeWidth="2"
                 strokeLinecap="round"
               />
-              {/* Humidity line (Cyan) */}
+              {/* Humidity line */}
               <path
                 d={humPath}
                 fill="none"
-                stroke="#06b6d4"
+                stroke="#0d9488"
                 strokeWidth="2"
                 strokeDasharray="4 2"
                 strokeLinecap="round"
               />
-              {/* Dots */}
               {data.map((d, i) => (
                 <g key={d.id} onMouseEnter={() => setHoverIndex(i)} className="cursor-pointer">
                   <circle
                     cx={getX(i)}
                     cy={getYTemp(d.temperature)}
                     r={3}
-                    fill="#38bdf8"
-                    stroke="#0f172a"
+                    fill="#0284c7"
+                    stroke="#ffffff"
                     strokeWidth="1.5"
                   />
                   <circle
                     cx={getX(i)}
                     cy={getYHum(d.humidity)}
                     r={3}
-                    fill="#06b6d4"
-                    stroke="#0f172a"
+                    fill="#0d9488"
+                    stroke="#ffffff"
                     strokeWidth="1.5"
                   />
                 </g>
@@ -284,7 +267,7 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
               y1={padding.top}
               x2={getX(hoverIndex)}
               y2={padding.top + graphHeight}
-              stroke="rgba(255,255,255,0.4)"
+              stroke="#94a3b8"
               strokeDasharray="2 2"
             />
           )}
@@ -299,7 +282,7 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
                 x={getX(i)}
                 y={padding.top + graphHeight + 20}
                 textAnchor="middle"
-                className="fill-slate-400 text-[10px] font-mono"
+                className="fill-slate-500 text-[10px] font-mono"
               >
                 {time}
               </text>
@@ -309,15 +292,15 @@ export function TelemetryChart({ readings, lowThreshold, highThreshold }: Teleme
 
         {/* Hover Tooltip Overlay */}
         {hoveredItem && (
-          <div className="mt-3 flex flex-wrap items-center justify-between rounded-xl bg-black/60 px-4 py-2 text-xs border border-white/5 font-mono">
+          <div className="mt-3 flex flex-wrap items-center justify-between rounded-xl bg-slate-900 px-4 py-2 text-xs border border-slate-800 font-mono text-white shadow-xs">
             <div className="flex items-center gap-2 text-slate-300">
               <Clock className="h-3.5 w-3.5 text-slate-400" />
               <span>Timestamp: {new Date(hoveredItem.recordedAt).toLocaleString()}</span>
             </div>
             <div className="flex items-center gap-4 text-xs font-semibold">
               <span className="text-emerald-400">Soil: {hoveredItem.soilMoisture}% (ADC {hoveredItem.soilMoistureRaw})</span>
-              <span className="text-sky-400">Temp: {hoveredItem.temperature}°C</span>
-              <span className="text-cyan-400">Humidity: {hoveredItem.humidity}%</span>
+              <span className="text-sky-300">Temp: {hoveredItem.temperature}°C</span>
+              <span className="text-teal-300">Humidity: {hoveredItem.humidity}%</span>
               <span className={hoveredItem.pumpStatus === "ON" || hoveredItem.pumpStatus === "AUTO_IRRIGATING" ? "text-emerald-400" : "text-slate-400"}>
                 Pump: {hoveredItem.pumpStatus}
               </span>

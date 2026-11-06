@@ -4,15 +4,9 @@ import React, { useState } from "react";
 import { 
   Cpu, 
   Terminal, 
-  Play, 
-  RotateCcw, 
-  Sliders, 
-  Droplets, 
   CloudRain, 
   Sun, 
-  Zap, 
   Usb, 
-  CheckCircle2, 
   AlertTriangle 
 } from "lucide-react";
 import { WebSerialManager } from "@/lib/webSerial";
@@ -115,25 +109,25 @@ export function HardwareSimulatorModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-2xl rounded-2xl border border-white/15 bg-slate-900 shadow-2xl p-6 space-y-5">
-        <div className="flex items-center justify-between pb-3 border-b border-white/10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+      <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white shadow-2xl p-6 space-y-5">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
               <Cpu className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 Hardware Bench & Arduino UNO R3 Simulator
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Interactive IoT sensor emulation & live Web Serial USB connector
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-white/10"
+            className="rounded-lg p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
           >
             ✕
           </button>
@@ -141,59 +135,59 @@ export function HardwareSimulatorModal({
 
         {/* Quick Scenario Triggers */}
         <div className="space-y-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
             Quick Scenario Testing (Hackathon Demo)
           </span>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             <button
               onClick={handleTriggerDrought}
-              className="flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-left hover:bg-rose-500/20 transition-colors"
+              className="flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50/70 p-3 text-left hover:bg-rose-100 transition-colors shadow-2xs"
             >
-              <Sun className="h-4 w-4 text-rose-400" />
+              <Sun className="h-4 w-4 text-rose-600" />
               <div>
-                <div className="text-xs font-bold text-rose-200">Trigger Dry Soil</div>
-                <div className="text-[10px] text-rose-400">Moisture &lt;30% (Pump ON)</div>
+                <div className="text-xs font-bold text-rose-900">Trigger Dry Soil</div>
+                <div className="text-[10px] text-rose-700">Moisture &lt;30% (Pump ON)</div>
               </div>
             </button>
 
             <button
               onClick={handleTriggerRain}
-              className="flex items-center gap-2 rounded-xl border border-sky-500/30 bg-sky-500/10 p-3 text-left hover:bg-sky-500/20 transition-colors"
+              className="flex items-center gap-2 rounded-xl border border-sky-200 bg-sky-50/70 p-3 text-left hover:bg-sky-100 transition-colors shadow-2xs"
             >
-              <CloudRain className="h-4 w-4 text-sky-400" />
+              <CloudRain className="h-4 w-4 text-sky-600" />
               <div>
-                <div className="text-xs font-bold text-sky-200">Trigger Rain Event</div>
-                <div className="text-[10px] text-sky-400">Moisture 82% (Pump OFF)</div>
+                <div className="text-xs font-bold text-sky-900">Trigger Rain Event</div>
+                <div className="text-[10px] text-sky-700">Moisture 82% (Pump OFF)</div>
               </div>
             </button>
 
             <button
               onClick={handleConnectWebSerial}
-              className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-left hover:bg-emerald-500/20 transition-colors col-span-2 sm:col-span-1"
+              className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3 text-left hover:bg-emerald-100 transition-colors col-span-2 sm:col-span-1 shadow-2xs"
             >
-              <Usb className="h-4 w-4 text-emerald-400" />
+              <Usb className="h-4 w-4 text-emerald-700" />
               <div>
-                <div className="text-xs font-bold text-emerald-200">Connect Real USB</div>
-                <div className="text-[10px] text-emerald-400">Web Serial API (Chrome)</div>
+                <div className="text-xs font-bold text-emerald-900">Connect Real USB</div>
+                <div className="text-[10px] text-emerald-700">Web Serial API (Chrome)</div>
               </div>
             </button>
           </div>
 
           {webSerialError && (
-            <div className="rounded-lg bg-amber-500/10 p-2 text-xs text-amber-300 border border-amber-500/20 flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+            <div className="rounded-lg bg-amber-50 p-2 text-xs text-amber-900 border border-amber-200 flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 flex-shrink-0 text-amber-600" />
               <span>{webSerialError}</span>
             </div>
           )}
         </div>
 
         {/* Sliders */}
-        <div className="rounded-xl border border-white/10 bg-black/40 p-4 space-y-4">
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-300">Continuous Parameter Adjustment</span>
+            <span className="text-xs font-bold text-slate-700">Continuous Parameter Adjustment</span>
             <button
               onClick={handleApplySliders}
-              className="rounded-lg bg-emerald-500 px-3 py-1 text-xs font-bold text-slate-950 hover:bg-emerald-400 transition-colors"
+              className="rounded-lg bg-emerald-600 px-3 py-1 text-xs font-bold text-white hover:bg-emerald-700 transition-colors shadow-xs"
             >
               Push to Telemetry
             </button>
@@ -202,8 +196,8 @@ export function HardwareSimulatorModal({
           <div className="space-y-3">
             <div>
               <div className="flex justify-between text-xs font-medium mb-1">
-                <span className="text-slate-400">Soil Moisture:</span>
-                <span className="font-mono text-emerald-400 font-bold">{sliderMoisture}%</span>
+                <span className="text-slate-600">Soil Moisture:</span>
+                <span className="font-mono text-emerald-700 font-bold">{sliderMoisture}%</span>
               </div>
               <input
                 type="range"
@@ -211,14 +205,14 @@ export function HardwareSimulatorModal({
                 max="95"
                 value={sliderMoisture}
                 onChange={(e) => setSliderMoisture(Number(e.target.value))}
-                className="w-full accent-emerald-500 cursor-pointer"
+                className="w-full accent-emerald-600 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-xs font-medium mb-1">
-                <span className="text-slate-400">Ambient Temperature:</span>
-                <span className="font-mono text-sky-400 font-bold">{sliderTemp}°C</span>
+                <span className="text-slate-600">Ambient Temperature:</span>
+                <span className="font-mono text-slate-900 font-bold">{sliderTemp}°C</span>
               </div>
               <input
                 type="range"
@@ -226,14 +220,14 @@ export function HardwareSimulatorModal({
                 max="45"
                 value={sliderTemp}
                 onChange={(e) => setSliderTemp(Number(e.target.value))}
-                className="w-full accent-sky-500 cursor-pointer"
+                className="w-full accent-slate-700 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-xs font-medium mb-1">
-                <span className="text-slate-400">Relative Humidity:</span>
-                <span className="font-mono text-cyan-400 font-bold">{sliderHum}%</span>
+                <span className="text-slate-600">Relative Humidity:</span>
+                <span className="font-mono text-slate-900 font-bold">{sliderHum}%</span>
               </div>
               <input
                 type="range"
@@ -241,7 +235,7 @@ export function HardwareSimulatorModal({
                 max="95"
                 value={sliderHum}
                 onChange={(e) => setSliderHum(Number(e.target.value))}
-                className="w-full accent-cyan-500 cursor-pointer"
+                className="w-full accent-slate-700 cursor-pointer"
               />
             </div>
           </div>
@@ -250,13 +244,13 @@ export function HardwareSimulatorModal({
         {/* Serial Terminal Output */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
               <Terminal className="h-3.5 w-3.5 text-slate-400" />
               Live USB Serial Stream (9600 Baud)
             </span>
-            <span className="text-[10px] text-emerald-400 font-mono">RX: OK • CRC: Valid</span>
+            <span className="text-[10px] text-emerald-700 font-mono font-bold">RX: OK • CRC: Valid</span>
           </div>
-          <div className="h-28 overflow-y-auto rounded-xl border border-white/10 bg-black/80 p-3 font-mono text-[11px] text-slate-300 space-y-1">
+          <div className="h-28 overflow-y-auto rounded-xl border border-slate-200 bg-slate-950 p-3 font-mono text-[11px] text-slate-300 space-y-1">
             {serialLogs.map((log, idx) => (
               <div
                 key={idx}
@@ -276,10 +270,10 @@ export function HardwareSimulatorModal({
           </div>
         </div>
 
-        <div className="flex justify-end pt-2 border-t border-white/10">
+        <div className="flex justify-end pt-2 border-t border-slate-100">
           <button
             onClick={onClose}
-            className="rounded-lg bg-white/10 px-4 py-2 text-xs font-semibold text-white hover:bg-white/20 transition-colors"
+            className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
           >
             Done
           </button>
