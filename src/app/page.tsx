@@ -1,443 +1,206 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { 
-  FarmLocation, 
-  ProductBatch, 
-  SensorReading, 
-  IrrigationConfig 
-} from "@/lib/types";
-import { MOCK_FARMS, INITIAL_BATCHES } from "@/lib/mockData";
-import { EnterpriseHeader } from "@/components/Layout/EnterpriseHeader";
-import { EnterpriseSidebar } from "@/components/Layout/EnterpriseSidebar";
-import { LiveGauge } from "@/components/Telemetry/LiveGauge";
-import { TelemetryChart } from "@/components/Telemetry/TelemetryChart";
-import { IrrigationControlPanel } from "@/components/Telemetry/IrrigationControlPanel";
+import { NatureParticlesCanvas } from "@/components/NatureParticlesCanvas";
+import { FarmChainHeader, ScreenId } from "@/components/Layout/FarmChainHeader";
+import { FarmChainFooter } from "@/components/Layout/FarmChainFooter";
+import { LandingView } from "@/components/Views/LandingView";
+import { DashboardView } from "@/components/Views/DashboardView";
+import { FarmFleetView } from "@/components/Views/FarmFleetView";
+import { SmartIrrigationView } from "@/components/Views/SmartIrrigationView";
+import { TraceabilityView } from "@/components/Views/TraceabilityView";
+import { ConsumerVerificationView } from "@/components/Views/ConsumerVerificationView";
+
+// Modals for complete functionality
 import { HardwareSimulatorModal } from "@/components/Telemetry/HardwareSimulatorModal";
-import { BatchRegisterModal } from "@/components/Batches/BatchRegisterModal";
-import { BatchList } from "@/components/Batches/BatchList";
-import { SupplyChainTimeline } from "@/components/SupplyChain/SupplyChainTimeline";
-import { RecordEventModal } from "@/components/SupplyChain/RecordEventModal";
-import { QRCodeModal } from "@/components/Verification/QRCodeModal";
-import { VerificationPortal } from "@/components/Verification/VerificationPortal";
-import { PwCAgriInsights } from "@/components/AIInsights/PwCAgriInsights";
 import { HardwareGatewayModal } from "@/components/Developer/HardwareGatewayModal";
-import { 
-  Droplets, 
-  Sliders, 
-  MapPin, 
-  Terminal
-} from "lucide-react";
+import { PwCAgriInsights } from "@/components/AIInsights/PwCAgriInsights";
+import { MOCK_FARMS } from "@/lib/mockData";
+import { X, BarChart3 } from "lucide-react";
 
-export default function EnterpriseDashboard() {
-  const [farms] = useState<FarmLocation[]>(MOCK_FARMS);
-  const [selectedFarm, setSelectedFarm] = useState<FarmLocation>(MOCK_FARMS[0]);
-  const [activeTab, setActiveTab] = useState<string>("telemetry");
-  const [activeRole, setActiveRole] = useState<string>("agronomist");
+export default function HomePage() {
+  const [currentScreen, setCurrentScreen] = useState<ScreenId>("landing");
 
-  // Telemetry state
-  const [readings, setReadings] = useState<SensorReading[]>([]);
-  const [latestReading, setLatestReading] = useState<SensorReading | null>(null);
+  // Telemetry & Edge State
+  const [moisture, setMoisture] = useState<number>(34);
+  const [temperature, setTemperature] = useState<number>(28.4);
+  const [humidity, setHumidity] = useState<number>(62);
+  const [isPumpRunning, setIsPumpRunning] = useState<boolean>(false);
+  const [cutoffThreshold, setCutoffThreshold] = useState<number>(45);
 
-  // Batches state
-  const [batches, setBatches] = useState<ProductBatch[]>(INITIAL_BATCHES);
-  const [selectedBatchForTimeline, setSelectedBatchForTimeline] = useState<ProductBatch>(INITIAL_BATCHES[0]);
+  // Serial Console Logs
+  const [serialLogs, setSerialLogs] = useState<string[]>([
+    "[08:00:12] BAUD 9600 OK — ARDUINO UNO R3 INITIALIZED",
+    "[08:00:15] READ SOIL: 34% (V: 2.1V / CAPACITIVE PROBE V1.2)",
+    "[08:00:18] DHT22 SENSOR: TEMP: 28.4C | HUM: 62%",
+    "[08:00:20] WARN: SOIL MOISTURE < 45% THRESHOLD CUTOFF",
+    "[08:00:22] RELAY PIN D7: TRIGGERED AUTO IRRIGATION CYCLE",
+    "[08:15:00] NEAR TX: 0x9f3k...89a1 IMMUTABLE MINT OK",
+    "[08:22:45] SYNC: SUPABASE EDGE DB SYNCHRONIZED (LATENCY 18ms)",
+  ]);
 
-  // Irrigation config
-  const [irrigationConfig, setIrrigationConfig] = useState<IrrigationConfig>({
-    autoMode: true,
-    moistureThresholdLow: 32,
-    moistureThresholdHigh: 68,
-    maxRuntimeSeconds: 180,
-    cooldownPeriodSeconds: 300,
-    lastRunTimestamp: null,
-    runtimeElapsedSeconds: 0,
-    isSafeguardTriggered: false,
-    manualOverride: false,
-  });
+  // Selected batch for consumer portal
+  const [selectedBatchId, setSelectedBatchId] = useState<string>("#FC-AVO-2026-88");
 
-  // Modals state
-  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
-  const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
-  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-  const [qrBatch, setQrBatch] = useState<ProductBatch | null>(null);
-  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
-  const [isGatewayModalOpen, setIsGatewayModalOpen] = useState(false);
-  const [isHardwareConnected] = useState(false);
+  // Modals
+  const [isSimulatorOpen, setIsSimulatorOpen] = useState<boolean>(false);
+  const [isGatewayOpen, setIsGatewayOpen] = useState<boolean>(false);
+  const [isPwCInsightsOpen, setIsPwCInsightsOpen] = useState<boolean>(false);
 
-  // Fetch initial telemetry
-  useEffect(() => {
-    fetch(`/api/telemetry?farmId=${selectedFarm.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setReadings(data.history || []);
-          setLatestReading(data.latest || null);
-        }
-      })
-      .catch(console.error);
-  }, [selectedFarm.id]);
-
-  // Real-time telemetry emulation / live cycle
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setReadings((prev) => {
-        if (prev.length === 0) return prev;
-        const last = prev[prev.length - 1];
-
-        // Moisture physics: slowly decreases naturally (evaporation), or rises rapidly if pump is ON
-        const isPumpRunning =
-          last.pumpStatus === "ON" ||
-          last.pumpStatus === "AUTO_IRRIGATING" ||
-          (irrigationConfig.autoMode && last.soilMoisture < irrigationConfig.moistureThresholdLow);
-
-        let newMoisture = last.soilMoisture;
-        if (isPumpRunning) {
-          newMoisture = Math.min(85, newMoisture + 1.2);
-        } else {
-          newMoisture = Math.max(18, newMoisture - 0.15);
-        }
-        newMoisture = Number(newMoisture.toFixed(1));
-
-        // Evaluate auto cutoff
-        let pumpStatus = last.pumpStatus;
-        if (irrigationConfig.autoMode) {
-          if (newMoisture < irrigationConfig.moistureThresholdLow) {
-            pumpStatus = "AUTO_IRRIGATING";
-          } else if (newMoisture >= irrigationConfig.moistureThresholdHigh) {
-            pumpStatus = "OFF";
-          }
-        }
-
-        const newTemp = Number((last.temperature + (Math.random() * 0.2 - 0.1)).toFixed(1));
-        const newHum = Math.round(Math.min(95, Math.max(30, last.humidity + (Math.random() * 0.6 - 0.3))));
-        const rawSoil = Math.round(750 - (newMoisture / 100) * 450);
-
-        const newReading: SensorReading = {
-          id: `live-${Date.now()}`,
-          farmId: selectedFarm.id,
-          soilMoisture: newMoisture,
-          soilMoistureRaw: rawSoil,
-          temperature: newTemp,
-          humidity: newHum,
-          lightIntensity: last.lightIntensity,
-          vaporPressureDeficit: last.vaporPressureDeficit,
-          pumpStatus,
-          waterLevelPct: Number((last.waterLevelPct - (isPumpRunning ? 0.08 : 0.01)).toFixed(1)),
-          recordedAt: new Date().toISOString(),
-          source: isHardwareConnected ? "HARDWARE_SERIAL" : "WEB_SIMULATOR",
-        };
-
-        setLatestReading(newReading);
-        return [...prev.slice(1), newReading];
-      });
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [selectedFarm.id, irrigationConfig, isHardwareConnected]);
-
-  // Simulator apply callback
-  const handleSimulateValues = (values: { moisture?: number; temp?: number; humidity?: number; pump?: boolean }) => {
-    if (!latestReading) return;
-    const updatedMoisture = values.moisture !== undefined ? values.moisture : latestReading.soilMoisture;
-    const updatedTemp = values.temp !== undefined ? values.temp : latestReading.temperature;
-    const updatedHum = values.humidity !== undefined ? values.humidity : latestReading.humidity;
-    const updatedPump = values.pump !== undefined ? (values.pump ? "ON" : "OFF") : latestReading.pumpStatus;
-
-    const newReading: SensorReading = {
-      ...latestReading,
-      id: `sim-${Date.now()}`,
-      soilMoisture: updatedMoisture,
-      soilMoistureRaw: Math.round(750 - (updatedMoisture / 100) * 450),
-      temperature: updatedTemp,
-      humidity: updatedHum,
-      pumpStatus: updatedPump,
-      recordedAt: new Date().toISOString(),
-    };
-
-    setLatestReading(newReading);
-    setReadings((prev) => [...prev.slice(1), newReading]);
+  // Screen switching helper
+  const handleScreenChange = (screen: ScreenId) => {
+    setCurrentScreen(screen);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
-  const handleTriggerManualOverride = (forceOn: boolean) => {
-    if (!latestReading) return;
-    setIrrigationConfig((prev) => ({
-      ...prev,
-      autoMode: false,
-      manualOverride: forceOn,
-      runtimeElapsedSeconds: forceOn ? 1 : 0,
-    }));
+  // Toggle Pump override
+  const handleTogglePump = () => {
+    const nextState = !isPumpRunning;
+    setIsPumpRunning(nextState);
 
-    const newReading: SensorReading = {
-      ...latestReading,
-      pumpStatus: forceOn ? "ON" : "OFF",
-      recordedAt: new Date().toISOString(),
-    };
-    setLatestReading(newReading);
+    const now = new Date().toTimeString().split(" ")[0];
+    const newLog = nextState
+      ? `[${now}] OVERRIDE: MANUAL PUMP ACTUATOR ACTIVATED (PIN D7 HIGH)`
+      : `[${now}] OVERRIDE: PUMP ACTUATOR STOPPED (PIN D7 LOW)`;
+
+    setSerialLogs((prev) => [newLog, ...prev.slice(0, 40)]);
   };
 
-  const handleBatchCreated = (newBatch: ProductBatch) => {
-    setBatches((prev) => [newBatch, ...prev]);
-    setSelectedBatchForTimeline(newBatch);
-  };
+  // When simulated from HardwareSimulatorModal
+  const handleSimulateValues = (values: {
+    moisture?: number;
+    temp?: number;
+    humidity?: number;
+    pump?: boolean;
+  }) => {
+    if (values.moisture !== undefined) setMoisture(values.moisture);
+    if (values.temp !== undefined) setTemperature(values.temp);
+    if (values.humidity !== undefined) setHumidity(values.humidity);
+    if (values.pump !== undefined) setIsPumpRunning(values.pump);
 
-  const handleOpenQR = (batch: ProductBatch) => {
-    setQrBatch(batch);
-    setIsQRModalOpen(true);
+    const now = new Date().toTimeString().split(" ")[0];
+    const log = `[${now}] SIMULATOR: Moisture=${values.moisture ?? moisture}% Temp=${values.temp ?? temperature}C Pump=${values.pump ?? isPumpRunning ? "1" : "0"}`;
+    setSerialLogs((prev) => [log, ...prev.slice(0, 40)]);
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900">
-      {/* Enterprise Executive Header */}
-      <EnterpriseHeader
-        farms={farms}
-        selectedFarm={selectedFarm}
-        onSelectFarm={setSelectedFarm}
-        activeRole={activeRole}
-        onChangeRole={setActiveRole}
-        onOpenNewBatchModal={() => setIsBatchModalOpen(true)}
+    <div className="min-h-screen bg-enterprise-void text-[#F8FAFC] flex flex-col relative selection:bg-enterprise-accent selection:text-enterprise-void">
+      {/* Background Interactive Luminous Particles */}
+      <NatureParticlesCanvas />
+
+      {/* Top Sticky Navigation */}
+      <FarmChainHeader
+        currentScreen={currentScreen}
+        onScreenChange={handleScreenChange}
         onOpenSimulator={() => setIsSimulatorOpen(true)}
-        onOpenGatewayModal={() => setIsGatewayModalOpen(true)}
-        isHardwareConnected={isHardwareConnected}
-        activeTab={activeTab}
+        onOpenGateway={() => setIsGatewayOpen(true)}
+        isArduinoOnline={true}
       />
 
-      <div className="flex-1 flex flex-col md:flex-row">
-        {/* Enterprise Sidebar */}
-        <EnterpriseSidebar
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          selectedFarm={selectedFarm}
-          latestReading={latestReading}
-          onOpenGatewayModal={() => setIsGatewayModalOpen(true)}
-        />
+      {/* Main Screen Views */}
+      <main className="flex-1">
+        {currentScreen === "landing" && (
+          <LandingView
+            onNavigate={handleScreenChange}
+            soilMoisture={moisture}
+            isPumpRunning={isPumpRunning}
+          />
+        )}
 
-        {/* Main Content Area */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto max-w-7xl">
-          
-          {/* TAB 1: IOT TELEMETRY & IRRIGATION ENGINE */}
-          {activeTab === "telemetry" && (
-            <div className="space-y-6 animate-fade-in">
-              {/* Facility Banner */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
-                    <Droplets className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                      <span>{selectedFarm.name}</span>
-                      <span className="font-mono text-xs text-slate-500">({selectedFarm.code})</span>
-                    </h2>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-0.5">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-slate-400" />
-                        {selectedFarm.region}, {selectedFarm.country}
-                      </span>
-                      <span>•</span>
-                      <span>Crop: <strong className="text-emerald-700 font-semibold">{selectedFarm.cropType.split(" (")[0]}</strong></span>
-                      <span>•</span>
-                      <span>{selectedFarm.totalAreaHectares} Hectares</span>
-                    </div>
-                  </div>
-                </div>
+        {currentScreen === "dashboard" && (
+          <DashboardView
+            moisture={moisture}
+            temperature={temperature}
+            humidity={humidity}
+            isPumpRunning={isPumpRunning}
+            onTogglePump={handleTogglePump}
+            onOpenSimulator={() => setIsSimulatorOpen(true)}
+            onOpenGateway={() => setIsGatewayOpen(true)}
+            onOpenPwCInsights={() => setIsPwCInsightsOpen(true)}
+            serialLogs={serialLogs}
+          />
+        )}
 
-                <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <button
-                    onClick={() => setIsSimulatorOpen(true)}
-                    className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors shadow-2xs"
-                  >
-                    <Sliders className="h-3.5 w-3.5 text-emerald-600" />
-                    <span>Hardware Simulator Bench</span>
-                  </button>
-                </div>
-              </div>
+        {currentScreen === "farms" && (
+          <FarmFleetView onNavigate={handleScreenChange} />
+        )}
 
-              {/* 4 Precision Metric Gauges */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <LiveGauge
-                  title="Soil Moisture"
-                  value={latestReading ? latestReading.soilMoisture : 42.5}
-                  unit="%"
-                  subValue={latestReading ? `Analog ADC: ${latestReading.soilMoistureRaw}` : "ADC: 540"}
-                  min={0}
-                  max={100}
-                  targetRange={[32, 68]}
-                  type="moisture"
-                  statusText={
-                    latestReading && latestReading.soilMoisture < 32
-                      ? "Under-irrigated (Threshold Triggered)"
-                      : "Optimal Moisture Profile"
-                  }
-                />
+        {currentScreen === "irrigation" && (
+          <SmartIrrigationView
+            cutoffThreshold={cutoffThreshold}
+            onUpdateCutoff={(val) => {
+              setCutoffThreshold(val);
+              const now = new Date().toTimeString().split(" ")[0];
+              setSerialLogs((prev) => [
+                `[${now}] CONFIG: Moisture cutoff threshold updated to ${val}%`,
+                ...prev,
+              ]);
+            }}
+          />
+        )}
 
-                <LiveGauge
-                  title="Ambient Temperature"
-                  value={latestReading ? latestReading.temperature : 25.4}
-                  unit="°C"
-                  subValue="DHT22 Sensor (Pin D2)"
-                  min={10}
-                  max={45}
-                  targetRange={[20, 32]}
-                  type="temp"
-                />
+        {currentScreen === "traceability" && (
+          <TraceabilityView
+            onNavigate={handleScreenChange}
+            onSelectBatch={(id) => setSelectedBatchId(id)}
+          />
+        )}
 
-                <LiveGauge
-                  title="Relative Humidity"
-                  value={latestReading ? latestReading.humidity : 58}
-                  unit="%"
-                  subValue={latestReading ? `VPD: ${latestReading.vaporPressureDeficit} kPa` : "VPD: 1.15 kPa"}
-                  min={0}
-                  max={100}
-                  targetRange={[45, 80]}
-                  type="humidity"
-                />
+        {currentScreen === "consumer" && (
+          <ConsumerVerificationView batchId={selectedBatchId} />
+        )}
+      </main>
 
-                <LiveGauge
-                  title="Water Reservoir Level"
-                  value={latestReading ? latestReading.waterLevelPct : 84.0}
-                  unit="%"
-                  subValue="Safe Run: 48h Capacity"
-                  min={0}
-                  max={100}
-                  targetRange={[20, 100]}
-                  type="water"
-                />
-              </div>
+      {/* Footer */}
+      <FarmChainFooter />
 
-              {/* Telemetry Chart */}
-              <TelemetryChart
-                readings={readings}
-                lowThreshold={irrigationConfig.moistureThresholdLow}
-                highThreshold={irrigationConfig.moistureThresholdHigh}
-              />
-
-              {/* Irrigation Control & Safety Safeguards */}
-              <IrrigationControlPanel
-                config={irrigationConfig}
-                onUpdateConfig={(updates) => setIrrigationConfig((prev) => ({ ...prev, ...updates }))}
-                onTriggerManualOverride={handleTriggerManualOverride}
-                currentMoisture={latestReading ? latestReading.soilMoisture : 42}
-              />
-            </div>
-          )}
-
-          {/* TAB 2: HARVEST BATCH REGISTRY */}
-          {activeTab === "batches" && (
-            <div className="space-y-6 animate-fade-in">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 tracking-wide">
-                    Certified Harvest Batches & On-Chain Registries
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Immutable batch units committed to NEAR Blockchain with SHA-256 cryptographic proof
-                  </p>
-                </div>
-              </div>
-
-              <BatchList
-                batches={batches}
-                onOpenQR={handleOpenQR}
-                onSelectBatchForTimeline={(b) => {
-                  setSelectedBatchForTimeline(b);
-                  setActiveTab("supplychain");
-                }}
-                onOpenNewBatchModal={() => setIsBatchModalOpen(true)}
-              />
-            </div>
-          )}
-
-          {/* TAB 3: PROVENANCE TRACK & TRACE */}
-          {activeTab === "supplychain" && (
-            <div className="space-y-6 animate-fade-in">
-              <SupplyChainTimeline
-                batch={selectedBatchForTimeline}
-                onOpenRecordModal={() => setIsRecordModalOpen(true)}
-                onOpenQR={() => handleOpenQR(selectedBatchForTimeline)}
-              />
-            </div>
-          )}
-
-          {/* TAB 4: PWC AGRIBUSINESS & ESG INTELLIGENCE */}
-          {activeTab === "pwc-insights" && (
-            <div className="animate-fade-in">
-              <PwCAgriInsights selectedFarm={selectedFarm} />
-            </div>
-          )}
-
-          {/* TAB 5: CONSUMER VERIFICATION PORTAL */}
-          {activeTab === "consumer-verify" && (
-            <div className="animate-fade-in">
-              <VerificationPortal
-                initialBatch={selectedBatchForTimeline}
-                allBatches={batches}
-              />
-            </div>
-          )}
-
-          {/* TAB 6: DEVELOPER HUB */}
-          {activeTab === "hardware-gateway" && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4 animate-fade-in text-center shadow-xs">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
-                <Terminal className="h-8 w-8" />
-              </div>
-              <h2 className="text-lg font-bold text-slate-900">Developer Hub & Open Architecture</h2>
-              <p className="text-xs text-slate-500 max-w-lg mx-auto">
-                Access full source code for Arduino UNO firmware, Node.js USB serial gateway, NEAR Rust smart contract, and Supabase PostgreSQL schema.
-              </p>
-              <button
-                onClick={() => setIsGatewayModalOpen(true)}
-                className="rounded-xl bg-emerald-600 hover:bg-emerald-700 px-5 py-2.5 text-xs font-bold text-white shadow-xs transition-all"
-              >
-                Launch Developer Hub Modal
-              </button>
-            </div>
-          )}
-        </main>
-      </div>
-
-      {/* Global Modals */}
+      {/* Hardware Simulator Modal */}
       <HardwareSimulatorModal
         isOpen={isSimulatorOpen}
         onClose={() => setIsSimulatorOpen(false)}
-        currentMoisture={latestReading ? latestReading.soilMoisture : 42}
-        currentTemp={latestReading ? latestReading.temperature : 25}
-        currentHumidity={latestReading ? latestReading.humidity : 60}
-        isPumpActive={latestReading?.pumpStatus === "ON" || latestReading?.pumpStatus === "AUTO_IRRIGATING"}
+        currentMoisture={moisture}
+        currentTemp={temperature}
+        currentHumidity={humidity}
+        isPumpActive={isPumpRunning}
         onSimulateValues={handleSimulateValues}
       />
 
-      <BatchRegisterModal
-        isOpen={isBatchModalOpen}
-        onClose={() => setIsBatchModalOpen(false)}
-        farms={farms}
-        selectedFarm={selectedFarm}
-        onBatchCreated={handleBatchCreated}
-      />
-
-      <QRCodeModal
-        isOpen={isQRModalOpen}
-        onClose={() => setIsQRModalOpen(false)}
-        batch={qrBatch}
-      />
-
-      <RecordEventModal
-        isOpen={isRecordModalOpen}
-        onClose={() => setIsRecordModalOpen(false)}
-        batch={selectedBatchForTimeline}
-        onEventAdded={(evt) => {
-          setSelectedBatchForTimeline((prev) => ({
-            ...prev,
-            events: [...prev.events, evt],
-          }));
-        }}
-      />
-
+      {/* Hardware Gateway & Circuit Modal */}
       <HardwareGatewayModal
-        isOpen={isGatewayModalOpen}
-        onClose={() => setIsGatewayModalOpen(false)}
+        isOpen={isGatewayOpen}
+        onClose={() => setIsGatewayOpen(false)}
       />
+
+      {/* PwC ESG AgriInsights Modal */}
+      {isPwCInsightsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="glass-panel w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 rounded-3xl border border-enterprise-accent/30 space-y-6 animate-fade-in relative">
+            <div className="flex items-center justify-between border-b border-enterprise-glassBorder pb-4">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-enterprise-surface flex items-center justify-center text-enterprise-accent">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-lg">PwC AgriBusiness Insights & ESG Alignment</h3>
+                  <p className="text-xs text-enterprise-textSecondary font-mono">Benchmark Metrics 2020-2026</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsPwCInsightsOpen(false)}
+                className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="bg-enterprise-void/70 p-6 rounded-2xl border border-enterprise-glassBorder text-slate-200">
+              <PwCAgriInsights selectedFarm={MOCK_FARMS[0]} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

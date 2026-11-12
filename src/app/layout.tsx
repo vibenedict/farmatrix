@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 const geistMono = Geist_Mono({
@@ -13,17 +14,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FARMATRIX | Enterprise Smart Agriculture & NEAR Blockchain Platform",
+  title: "FARMATRIX FarmChain | Enterprise AgriTech & NEAR Blockchain",
   description:
-    "Fortune 500 IoT Agriculture Telemetry, Automated Micro-Irrigation & NEAR Blockchain Tamper-Evident Traceability Platform aligned with PwC Agribusiness benchmarks.",
+    "Fortune 500 Digital Farming Connected & Traceable. Real-time soil telemetry, automated 5V relay irrigation controls, and tamper-proof product verification on NEAR Protocol.",
   keywords: [
+    "FarmChain",
     "FARMATRIX",
+    "Enterprise AgriTech",
     "Smart Agriculture",
     "IoT Irrigation",
     "NEAR Blockchain",
     "Supply Chain Traceability",
     "AgriTech",
-    "PwC Agribusiness",
   ],
 };
 
@@ -33,9 +35,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full bg-[#f8fafc] text-slate-900 selection:bg-emerald-100 selection:text-emerald-900`}
+        className={`${jakartaSans.variable} ${geistMono.variable} font-sans antialiased min-h-full bg-enterprise-void text-[#F8FAFC] selection:bg-enterprise-accent selection:text-enterprise-void`}
       >
         {children}
       </body>
