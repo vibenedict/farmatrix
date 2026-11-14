@@ -11,8 +11,10 @@ import {
   Wind, 
   Zap,
   Play,
-  Square
+  Square,
+  Wallet
 } from "lucide-react";
+import { useWallet } from "@/context/WalletContext";
 
 interface DashboardViewProps {
   moisture: number;
@@ -46,6 +48,7 @@ export function DashboardView({
     "[08:22:45] SYNC: SUPABASE EDGE DB SYNCHRONIZED (LATENCY 18ms)",
   ],
 }: DashboardViewProps) {
+  const { isConnected, accountId, balance, openModal } = useWallet();
   // Chart points for 24h curve
   const timeLabels = ["00:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00"];
   const moisturePoints = [62, 55, 48, 41, 35, moisture, 58, 54];
@@ -104,6 +107,32 @@ export function DashboardView({
           </div>
           
           <div className="flex flex-wrap items-center gap-2.5">
+            {/* Connect Wallet / NEAR Account badge */}
+            <button
+              onClick={openModal}
+              title={isConnected ? `NEAR Wallet Connected: ${accountId}` : "Connect NEAR Wallet"}
+              className={`px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 border transition-all cursor-pointer ${
+                isConnected
+                  ? "bg-enterprise-void/90 border-enterprise-accent/60 text-white shadow-glow-emerald/20 hover:border-enterprise-accent"
+                  : "glass-panel glass-panel-hover text-enterprise-mint border-enterprise-accent/30 hover:border-enterprise-accent"
+              }`}
+            >
+              <Wallet className="w-3.5 h-3.5 text-enterprise-accent" />
+              {isConnected ? (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-enterprise-accent animate-pulse" />
+                  <span className="font-mono text-xs">
+                    {accountId.length > 16 ? `${accountId.slice(0, 8)}...${accountId.slice(-6)}` : accountId}
+                  </span>
+                  <span className="text-[10px] font-mono text-enterprise-accent bg-enterprise-accent/10 px-1.5 py-0.5 rounded border border-enterprise-accent/20">
+                    {balance}
+                  </span>
+                </>
+              ) : (
+                <span>Connect Wallet</span>
+              )}
+            </button>
+
             {onOpenPwCInsights && (
               <button
                 onClick={onOpenPwCInsights}

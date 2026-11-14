@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { WalletProvider } from "@/context/WalletContext";
+import { WalletModal } from "@/components/Wallet/WalletModal";
 
 const jakartaSans = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -39,7 +41,10 @@ export default function RootLayout({
       <body
         className={`${jakartaSans.variable} ${geistMono.variable} font-sans antialiased min-h-full bg-enterprise-void text-[#F8FAFC] selection:bg-enterprise-accent selection:text-enterprise-void`}
       >
-        {children}
+        <WalletProvider>
+          <WalletModal />
+          {children}
+        </WalletProvider>
       </body>
     </html>
   );

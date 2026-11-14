@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Cpu, Terminal, Radio } from "lucide-react";
+import { Cpu, Terminal, Radio, Wallet } from "lucide-react";
+import { useWallet } from "@/context/WalletContext";
 
 export type ScreenId = "landing" | "dashboard" | "farms" | "irrigation" | "traceability" | "consumer";
 
@@ -20,6 +21,8 @@ export function FarmChainHeader({
   onOpenGateway,
   isArduinoOnline = true,
 }: FarmChainHeaderProps) {
+  const { isConnected, accountId, balance, openModal } = useWallet();
+
   const tabs: Array<{ id: ScreenId; label: string; hasBadge?: boolean }> = [
     { id: "landing", label: "Overview" },
     { id: "dashboard", label: "Dashboard" },
@@ -104,12 +107,39 @@ export function FarmChainHeader({
               </span>
             </div>
 
+            {/* Connect Wallet Button */}
+            <button
+              onClick={openModal}
+              id="connect-wallet-btn"
+              title={isConnected ? `NEAR Account: ${accountId}` : "Connect NEAR Protocol Wallet"}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer border ${
+                isConnected
+                  ? "bg-enterprise-void/90 border-enterprise-accent/60 text-white hover:border-enterprise-accent shadow-glow-emerald/20"
+                  : "bg-enterprise-void/70 hover:bg-enterprise-surface/80 border-enterprise-glassBorder hover:border-enterprise-accent/80 text-enterprise-mint hover:text-white"
+              }`}
+            >
+              <Wallet className="w-3.5 h-3.5 text-enterprise-accent" />
+              {isConnected ? (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-enterprise-accent animate-pulse" />
+                  <span className="font-mono text-xs">
+                    {accountId.length > 16 ? `${accountId.slice(0, 8)}...${accountId.slice(-6)}` : accountId}
+                  </span>
+                  <span className="text-[10px] font-mono text-enterprise-accent bg-enterprise-accent/10 px-1.5 py-0.5 rounded border border-enterprise-accent/20 hidden xl:inline">
+                    {balance}
+                  </span>
+                </>
+              ) : (
+                <span>Connect Wallet</span>
+              )}
+            </button>
+
             {/* Portal Access Button */}
             <button
               onClick={() => onScreenChange("dashboard")}
-              className="px-4 py-2 rounded-xl bg-enterprise-accent hover:bg-enterprise-accentHover text-enterprise-void font-extrabold text-xs shadow-glow-emerald transition-all cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-enterprise-accent hover:bg-enterprise-accentHover text-enterprise-void font-extrabold text-xs shadow-glow-emerald transition-all cursor-pointer flex items-center gap-1.5"
             >
-              Portal Access
+              <span>Portal Access</span>
             </button>
           </div>
 
@@ -117,23 +147,34 @@ export function FarmChainHeader({
       </div>
 
       {/* Mobile Navigation Sub-bar */}
-      <div className="lg:hidden px-4 py-2 bg-enterprise-void/90 border-t border-enterprise-glassBorder flex items-center gap-2 overflow-x-auto no-scrollbar">
-        {tabs.map((tab) => {
-          const isActive = currentScreen === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => onScreenChange(tab.id)}
-              className={`mobile-screen-tab px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                isActive
-                  ? "text-enterprise-void bg-enterprise-accent font-bold"
-                  : "text-enterprise-textSecondary hover:text-white"
-              }`}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
+      <div className="lg:hidden px-4 py-2 bg-enterprise-void/90 border-t border-enterprise-glassBorder flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+          {tabs.map((tab) => {
+            const isActive = currentScreen === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onScreenChange(tab.id)}
+                className={`mobile-screen-tab px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                  isActive
+                    ? "text-enterprise-void bg-enterprise-accent font-bold"
+                    : "text-enterprise-textSecondary hover:text-white"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Mobile Connect Wallet shortcut */}
+        <button
+          onClick={openModal}
+          className="px-2.5 py-1 rounded-lg bg-enterprise-void border border-enterprise-accent/50 text-enterprise-accent text-xs font-bold whitespace-nowrap flex items-center gap-1.5 cursor-pointer shrink-0"
+        >
+          <Wallet className="w-3 h-3" />
+          <span>{isConnected ? (accountId.length > 10 ? `${accountId.slice(0, 6)}...` : accountId) : "Wallet"}</span>
+        </button>
       </div>
     </header>
   );

@@ -2,7 +2,8 @@
 
 import React from "react";
 import { ScreenId } from "@/components/Layout/FarmChainHeader";
-import { ArrowRight, QrCode, ShieldCheck } from "lucide-react";
+import { ArrowRight, QrCode, ShieldCheck, Wallet } from "lucide-react";
+import { useWallet } from "@/context/WalletContext";
 
 interface LandingViewProps {
   onNavigate: (screen: ScreenId) => void;
@@ -15,6 +16,7 @@ export function LandingView({
   soilMoisture = 34,
   isPumpRunning = true,
 }: LandingViewProps) {
+  const { isConnected, accountId, openModal } = useWallet();
   return (
     <section id="screen-landing" className="screen-view relative z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-16">
@@ -47,6 +49,13 @@ export function LandingView({
               >
                 <span>ENTER EXECUTIVE DASHBOARD</span>
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </button>
+              <button
+                onClick={openModal}
+                className="px-7 py-4 rounded-2xl glass-panel glass-panel-hover text-enterprise-mint hover:text-white font-bold text-sm transition-all flex items-center gap-2.5 border border-enterprise-accent/30 hover:border-enterprise-accent cursor-pointer"
+              >
+                <Wallet className="w-5 h-5 text-enterprise-accent" />
+                <span>{isConnected ? `WALLET: ${accountId.length > 14 ? `${accountId.slice(0, 10)}...` : accountId}` : "CONNECT WALLET"}</span>
               </button>
               <button
                 onClick={() => onNavigate("consumer")}

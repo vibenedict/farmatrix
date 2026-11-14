@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ProductBatch, SupplyChainEventType, SupplyChainEvent } from "@/lib/types";
 import { GitFork, ShieldCheck, Thermometer } from "lucide-react";
 import confetti from "canvas-confetti";
+import { useWallet } from "@/context/WalletContext";
 
 interface RecordEventModalProps {
   isOpen: boolean;
@@ -18,16 +19,25 @@ export function RecordEventModal({
   batch,
   onEventAdded,
 }: RecordEventModalProps) {
+  const { accountId, isConnected } = useWallet();
   const [eventType, setEventType] = useState<SupplyChainEventType>("COLD_STORAGE_DEPOSIT");
   const [title, setTitle] = useState("Cold Chain Intake & Pre-Cooling");
   const [location, setLocation] = useState("Lagos Central ColdHubs Terminal");
   const [facilityName, setFacilityName] = useState("ColdHubs Enterprise Facility #09");
-  const [actorAccount, setActorAccount] = useState("logistics-officer.near");
+  const [actorAccount, setActorAccount] = useState(
+    isConnected && accountId ? accountId : "logistics-officer.near"
+  );
   const [actorRole, setActorRole] = useState("Cold Chain Operations Manager");
   const [tempSnapshot, setTempSnapshot] = useState(12.4);
   const [humiditySnapshot, setHumiditySnapshot] = useState(82);
   const [notes, setNotes] = useState("Produce transferred into controlled-atmosphere cooling. Temperature maintained within ±0.5°C.");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isConnected && accountId) {
+      setActorAccount(accountId);
+    }
+  }, [isConnected, accountId]);
 
   if (!isOpen) return null;
 
