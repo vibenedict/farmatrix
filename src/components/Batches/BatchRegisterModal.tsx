@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { FarmLocation, CropType, QualityGrade, ProductBatch } from "@/lib/types";
-import { Boxes, Sparkles, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Boxes, Sparkles, ShieldCheck, CheckCircle2, Wallet } from "lucide-react";
+import { useWallet } from "@/context/WalletContext";
 
 interface BatchRegisterModalProps {
   isOpen: boolean;
@@ -19,13 +20,22 @@ export function BatchRegisterModal({
   selectedFarm,
   onBatchCreated,
 }: BatchRegisterModalProps) {
+  const { accountId, isConnected } = useWallet();
   const [cropName, setCropName] = useState<CropType>(selectedFarm.cropType);
   const [variety, setVariety] = useState("Roma Supreme Export Selection");
   const [quantityKg, setQuantityKg] = useState(2500);
   const [qualityGrade, setQualityGrade] = useState<QualityGrade>("Grade A+ (Export Certified)");
-  const [farmerNearAccount, setFarmerNearAccount] = useState("kano-valleys.agri.near");
+  const [farmerNearAccount, setFarmerNearAccount] = useState(
+    isConnected && accountId ? accountId : "kano-valleys.agri.near"
+  );
   const [loading, setLoading] = useState(false);
   const [createdBatch, setCreatedBatch] = useState<ProductBatch | null>(null);
+
+  useEffect(() => {
+    if (isConnected && accountId) {
+      setFarmerNearAccount(accountId);
+    }
+  }, [isConnected, accountId]);
 
   if (!isOpen) return null;
 
